@@ -2,6 +2,9 @@
 
 Universal Ads is a revolutionary decentralized advertising service built on the LUKSO network, designed to connect advertisers with a vast network of participating users seamlessly. By leveraging blockchain technology, Universal Ads allows businesses to display their ads across multiple users profile pages / grids within the LUKSO ecosystem. Whether you're a brand looking to expand your reach or a user monetizing your digital space, Universal Ads ensures transparency, fairness, and efficiency. With just one platform, advertisers can access a global audience, while users earn rewards for hosting ads. Welcome to the future of decentralized advertising – where every ad finds its audience, and every space becomes valuable.
 
+## Demo Video
+https://youtu.be/UnL9fR5dq9w?si=p7SL9hskNAXxP8HV
+
 ## OVERVIEW
 
 Universal Ads is a decentralized advertising service built on the LUKSO network, designed to solve the inefficiencies and challenges of traditional advertising. The platform connects advertisers with a vast network of participating users, enabling seamless ad distribution across user profiles / grids while ensuring fairness and efficiency.
