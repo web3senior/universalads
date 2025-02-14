@@ -5,6 +5,10 @@ Universal Ads is a revolutionary decentralized advertising service built on the 
 ## Demo Video
 https://youtu.be/UnL9fR5dq9w?si=p7SL9hskNAXxP8HV
 
+## Team
+-  James Jackson | Profile: https://universaleverything.io/0xd64deb40240209473f676945c2ed2bfa2cef2b7d
+-  Amir Rahimi | Profile: https://universaleverything.io/0x0D5C8B7cC12eD8486E1E0147CC0c3395739F138d
+
 ## OVERVIEW
 
 Universal Ads is a decentralized advertising service built on the LUKSO network, designed to solve the inefficiencies and challenges of traditional advertising. The platform connects advertisers with a vast network of participating users, enabling seamless ad distribution across user profiles / grids while ensuring fairness and efficiency.
