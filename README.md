@@ -13,7 +13,7 @@ https://youtu.be/UnL9fR5dq9w?si=p7SL9hskNAXxP8HV
 
 Universal Ads is a decentralized advertising service built on the LUKSO network, designed to solve the inefficiencies and challenges of traditional advertising. The platform connects advertisers with a vast network of participating users, enabling seamless ad distribution across user profiles / grids while ensuring fairness and efficiency.
 
-## Contract address on LUKSO TESTNET
+## Contract address on LUKSO
 ```
 0xE5cf766F1685AB88c35Eb0BFA92619050373e833
 ```
