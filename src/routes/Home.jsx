@@ -45,7 +45,7 @@ function Home() {
             }
 
         
-            const resres = res[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`http://localhost:5173/ad`) > -1)
+            const resres = res[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`https://universalads.vercel.app/ad`) > -1)
             console.log(resres)
             if (resres < 1) {
               toast.error(`Your wallet address is not eligible`)
