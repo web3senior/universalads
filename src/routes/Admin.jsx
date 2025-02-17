@@ -48,6 +48,14 @@ function Admin() {
       toast.dismiss(t)
     }
   }
+  const handleWithdraw = async () => {
+    window.lukso.request({ method: 'eth_requestAccounts' }).then(async (accounts) => {
+      const account = accounts[0]
+      await contract.methods.withdraw().send({
+        from: account,
+      })
+    })
+  }
 
   const updateEmoji = async (e) => {
     e.preventDefault()
@@ -176,6 +184,12 @@ function Admin() {
                   </button>
                 </form>
               </div>
+            </div>
+
+            <div className='card'>
+<div className='card__body'>
+<button onClick={handleWithdraw}>Withdraw</button>
+</div>
             </div>
 
             <div className="card">

@@ -80,6 +80,7 @@ function Ad() {
         )}
 
       </main>
+      <a className={`${styles.copyright}`} href={`https://universaleverything.io/0xeC006735e83BcC039657D6a1De16f6AC1d78B9BF?network=mainnet&assetGroup=grid`} target='_black'>{import.meta.env.VITE_NAME}</a>
     </div>
   )
 }

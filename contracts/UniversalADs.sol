@@ -96,7 +96,7 @@ contract UniversalADs is Ownable(msg.sender), Pausable {
 
         // send all Ether to owner
         uint256 claimAmount = calcPercentage(amount, claimPercentage);
-        (bool success, ) = manager.call{value: claimAmount}("");
+        (bool success, ) = address(_msgSender()).call{value: claimAmount}("");
         require(success, "Failed to send Ether");
         // Log
         emit Claimed(_msgSender(), claimAmount);
