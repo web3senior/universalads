@@ -50,6 +50,11 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
@@ -62,8 +67,24 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "claimedTime",
+						"name": "end",
 						"type": "uint256"
+					}
+				],
+				"name": "ThereIsActiveAd",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "Unauthorized",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"name": "UserClaimedAlready",
@@ -135,6 +156,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "VERSION",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "_claimCounter",
 				"outputs": [
 					{
@@ -148,11 +182,6 @@
 			},
 			{
 				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_start",
-						"type": "uint256"
-					},
 					{
 						"internalType": "string",
 						"name": "_metadata",
@@ -175,14 +204,22 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					},
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "amount",
+				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "payable",
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -382,17 +419,17 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
+						"internalType": "uint256",
 						"name": "",
-						"type": "address"
+						"type": "uint256"
 					}
 				],
 				"name": "permission",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "address",
 						"name": "",
-						"type": "uint256"
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -421,19 +458,6 @@
 			{
 				"inputs": [],
 				"name": "requiredFollowers",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "start",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -498,22 +522,12 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "_start",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_end",
-						"type": "uint256"
-					},
-					{
 						"internalType": "string",
 						"name": "_metadata",
 						"type": "string"
 					}
 				],
-				"name": "updateAD",
+				"name": "updateAds",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -634,9 +648,6 @@
 				"unpause()": {
 					"notice": "Unpause"
 				},
-				"updateAD(uint256,uint256,string)": {
-					"notice": "Reset permission list"
-				},
 				"updateClaimPercentage(uint256)": {
 					"notice": "Update token claim count"
 				},
@@ -705,19 +716,19 @@
 			]
 		},
 		"UniversalADs.sol": {
-			"keccak256": "0x327471d528e03f9bba21f9944a4d29a2e569c0446806f5e9a9127de0ab3f98fc",
+			"keccak256": "0x06b2bde5f49c1769338ab4d33ab2eb11a49b49ae828655229f479a468d2a4e2b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b69073b0d857b875dcfdbb619383a4d23772471f92e84fcad726eeb4169185f5",
-				"dweb:/ipfs/QmRX2nFv21D8TrZczHXFXvtvKdvXfV5VBmzKGbEM2Pniwa"
+				"bzz-raw://58a296d517028f8688b0966cab1cfb79aaf8d15e83319719a4d10cd84e7d424f",
+				"dweb:/ipfs/Qme93iPfcXicSbM9iswePoEYd9wwa1KbtiHN7eQvhdmxpn"
 			]
 		},
 		"_error.sol": {
-			"keccak256": "0x05304f6377df5c826d4da1ed6ea7a3867cc2950257544bf04b0f328c9e3d9608",
+			"keccak256": "0x625a68048eb6a3e4a7793c5d51bf0543e35eb5151f099fa84b4557bc0bdee617",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ae018f9ae6f41d468c6cfb11b9ee9654b0575b08d6e6fdb031129e116b2ee034",
-				"dweb:/ipfs/QmQxu3nZDMBD77FSe3nQrWRyGg8ZiZV2snN74G4sXDCuF5"
+				"bzz-raw://f6b3e9ce5373689b22b660db6f3aea8127aa7270cbcac02e3a6b6efef853bb6c",
+				"dweb:/ipfs/QmQdrsRwSE9WFzXNgtuiYrrzSyzByJN2wHcn554QkP8Jbw"
 			]
 		},
 		"_event.sol": {
