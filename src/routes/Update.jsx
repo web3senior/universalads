@@ -189,19 +189,16 @@ function Page() {
                 <>
                   <ul style={{ background: `var(--global-background-color)`, padding: `1rem`, borderRadius: `0.5rem` }} className="ms-depth-4 mb-10">
                     <li>
-                      <b>Start:</b> {toDate(ad[0])}
+                      <b>End:</b> {toDate(ad[0])}
                     </li>
                     <li>
-                      <b>End:</b> {toDate(ad[1])}
+                      <b>Duration:</b> {ad[1]} Days
                     </li>
                     <li>
-                      <b>Duration:</b> {ad[2]} Days
+                      <b>Amount:</b> {_.fromWei(ad[2], `ether`)} $LYX
                     </li>
                     <li>
-                      <b>Amount:</b> {_.fromWei(ad[3], `ether`)} $LYX
-                    </li>
-                    <li>
-                      <b>Mnagaer:</b> {ad[4]}
+                      <b>Mnagaer:</b> {ad[3]}
                     </li>
                     {ad.info && (
                       <>
