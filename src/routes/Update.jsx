@@ -20,19 +20,40 @@ const pinata = new PinataSDK({
 // const contract = new web3.eth.Contract(ABI, import.meta.env.VITE_CONTRACT)
 // const _ = web3.utils
 
-function Admin() {
+function Page() {
   const [isLoading, setIsLoading] = useState(false)
   const [price, setPrice] = useState([])
+  const [isThereActiveADs, setIsThereActiveADs] = useState()
+  const [ad, setAd] = useState()
+  const auth = useAuth()
 
   const getPrice = async () => await contract.methods.price().call()
+  const getNow = async () => await contract.methods.time().call()
+  const getEnd = async () => await contract.methods.end().call()
+  const getAd = async () => await contract.methods.getAD().call()
+  const getAllEmoji = async () => await contractReadOnly.methods.getAllEmoji().call()
+  const getAllUserReaction = async () => await contractReadOnly.methods.getAllUserReaction(`${auth.contextAccounts[0]}`).call()
+  const getIPFS = async (CID) => {
+    //  console.log(CID)
+    try {
+      let requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      }
+      const response = await fetch(`https://ipfs.io/ipfs/${CID}`, requestOptions)
+      if (!response.ok) throw new Response('Failed to get data', { status: 500 })
+      return response.json()
+    } catch (error) {
+      return 'null'
+    }
+  }
 
-  const createAD = async (e) => {
+  const updateAD = async (e) => {
     e.preventDefault()
     setIsLoading(true)
+
     const t = toast.loading(`Waiting for transaction's confirmation`)
     const formData = new FormData(e.target)
-    // let startDate = document.querySelector(`[name="startDate"]`).valueAsNumber
-    // startDate = startDate.toString().slice(0, startDate.toString().length - 3)
 
     //ToDO: upload on ipfs
     const title = formData.get('title')
@@ -46,15 +67,15 @@ function Admin() {
     })
 
     const metadata = `${upload.IpfsHash}`
-    const duration = formData.get('duration')
-    console.log(metadata, duration, _.toWei(duration, `ether`))
+
     try {
-      window.lukso.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+      //window.lukso.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+        const account = auth.accounts[0]
+
         contract.methods
-          .advertiser(metadata, duration)
+          .updateAds(metadata)
           .send({
-            from: accounts[0],
-            value: price * duration,
+            from: account,
           })
           .then((res) => {
             console.log(res) //res.events.tokenId
@@ -67,7 +88,7 @@ function Admin() {
           .catch((error) => {
             toast.dismiss(t)
           })
-      })
+    //  })
     } catch (error) {
       console.log(error)
       toast.dismiss(t)
@@ -113,11 +134,43 @@ function Admin() {
       toast.dismiss(t)
     }
   }
+  const toDate = (unix_timestamp) => {
+    var date = new Date(unix_timestamp * 1000)
+
+    // Hours part from the timestamp
+    var hours = date.getHours()
+
+    // Minutes part from the timestamp
+    var minutes = '0' + date.getMinutes()
+
+    // Seconds part from the timestamp
+    var seconds = '0' + date.getSeconds()
+
+    // Will display time in 10:30:23 format
+    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
+    return new Date(date).toString()
+  }
 
   useEffect(() => {
     getPrice().then((res) => {
       console.log(res)
       setPrice(res)
+    })
+
+    getNow().then((now) => {
+      getAd().then(async (ad) => {
+        console.log(ad)
+        setAd(ad)
+
+        const info = await getIPFS(ad[4])
+        ad.info = info
+
+        setAd(ad)
+        console.log(ad)
+        if (_.toNumber(ad[1]) - _.toNumber(now) > 0) {
+          setIsThereActiveADs(true)
+        } else setIsThereActiveADs(false)
+      })
     })
   }, [])
 
@@ -127,10 +180,49 @@ function Admin() {
       <div className={`__container`} data-width={`xlarge`}>
         <div className={`grid grid--fit grid--gap-1 w-100`} style={{ '--data-width': `300px` }}>
           <div className="card">
-            <div className="card__header d-flex align-items-center justify-content-between">New AD</div>
+            <div className="card__header d-flex align-items-center justify-content-between">Update AD</div>
             <div className="card__body">
+              <p className="alert alert--danger">Only manager of the ad can update!</p>
               {/* {errors?.email && <span>{errors.email}</span>} */}
-              <form onSubmit={(e) => createAD(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
+
+              {ad && (
+                <>
+                  <ul style={{ background: `var(--global-background-color)`, padding: `1rem`, borderRadius: `0.5rem` }} className="ms-depth-4 mb-10">
+                    <li>
+                      <b>Start:</b> {toDate(ad[0])}
+                    </li>
+                    <li>
+                      <b>End:</b> {toDate(ad[1])}
+                    </li>
+                    <li>
+                      <b>Duration:</b> {ad[2]} Days
+                    </li>
+                    <li>
+                      <b>Amount:</b> {_.fromWei(ad[3], `ether`)} $LYX
+                    </li>
+                    <li>
+                      <b>Mnagaer:</b> {ad[4]}
+                    </li>
+                    {ad.info && (
+                      <>
+                        <li>
+                          <b>Name:</b> {ad.info.name}
+                        </li>
+                        <li>
+                          <b>Link:</b> {ad.info.link}
+                        </li>
+                        <li>
+                          <figure>
+                            <img src={`https://ipfs.io/ipfs/${ad.info.image}`} style={{width: `200px`, height: `auto`}}/>
+                          </figure>
+                        </li>
+                      </>
+                    )}
+                  </ul>
+                </>
+              )}
+
+              <form onSubmit={(e) => updateAD(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
                 <div>
                   <input type="text" name="title" placeholder="Title" />
                 </div>
@@ -143,13 +235,8 @@ function Admin() {
                   <input type="text" name="image" placeholder="Image URL" required />
                 </div>
 
-                <div>
-                  <label htmlFor="">Days: </label>
-                  <input type="number" name="duration" id="" defaultValue={1} />
-                  <small>Price per day: 1 LYX</small>
-                </div>
                 <button className="mt-20 btn" type="submit">
-                  {isLoading ? 'Please wait...' : 'Create new AD'}
+                  {isLoading ? 'Please wait...' : 'Update AD'}
                 </button>
               </form>
             </div>
@@ -160,4 +247,4 @@ function Admin() {
   )
 }
 
-export default Admin
+export default Page

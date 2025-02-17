@@ -2,18 +2,16 @@
 
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import ABI from './../abi/UniversalADs.json'
-import LSP7ABI from './../abi/lsp7.json'
 import LSP0ERC725Account from '@lukso/lsp-smart-contracts/artifacts/LSP0ERC725Account.json'
 // import { toast } from '../components/NextToast'
 import { Loading } from './../routes/components/Loading'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import Web3 from 'web3'
 import { createClientUPProvider } from '@lukso/up-provider'
 
-export const provider = createClientUPProvider()
 export const AuthContext = React.createContext()
-
-// export const PROVIDER = process.env.NEXT_PUBLIC_RPC_URL
+export const provider = createClientUPProvider()
+// export const PROVIDER = import.meta.env.NEXT_PUBLIC_RPC_URL
 export const web3 = new Web3(provider)
 export const contract = new web3.eth.Contract(ABI, import.meta.env.VITE_CONTRACT)
 export const _ = web3.utils
@@ -30,7 +28,7 @@ export const getIPFS = async (CID) => {
     method: 'GET',
     redirect: 'follow',
   }
-  const response = await fetch(`${process.env.NEXT_PUBLIC_IPFS_GATEWAY}${CID}`, requestOptions)
+  const response = await fetch(`${import.meta.env.VITE_IPFS_GATEWAY}${CID}`, requestOptions)
   if (!response.ok) return { result: false } //throw new Response('Failed to get data', { status: 500 })
   return response.json()
 }
@@ -41,9 +39,9 @@ export const getIPFS = async (CID) => {
  * @returns
  */
 
-export const fetchProfile = async (account) => {
-  const web3 = new Web3(window.lukso)
-  const LSP0ERC725Contract = new web3.eth.Contract(LSP0ERC725Account.abi, account)
+export const fetchProfile = async (_addr) => {
+  const web3 = new Web3(provider)
+  const LSP0ERC725Contract = new web3.eth.Contract(LSP0ERC725Account.abi, _addr)
   try {
     return LSP0ERC725Contract.methods
       .getData('0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5')
@@ -67,7 +65,7 @@ export const fetchProfile = async (account) => {
         return json
       })
   } catch (error) {
-    console.log(error)
+    console.log(`fetch profile error => `, error)
     return []
   }
 }
@@ -78,15 +76,12 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [status, setStatus] = useState()
   const [balance, setBalance] = useState(0)
-  const web3 = new Web3(provider)
-
 
   const [accounts, setAccounts] = useState([])
   const [contextAccounts, setContextAccounts] = useState([]) //0x${string}
   const [profileConnected, setProfileConnected] = useState(false)
 
   const isWalletConnected = async () => {
-    const web3 = new Web3(window.lukso)
     try {
       let accounts = await web3.eth.getAccounts()
       return accounts[0]
@@ -94,13 +89,13 @@ export function AuthProvider({ children }) {
       toast.error(error.message)
     }
   }
+
   const getBalance = async (wallet) => {
     const balance = await web3.eth.getBalance(wallet)
     return parseFloat(web3.utils.fromWei(balance, `ether`)).toFixed(2)
   }
 
   const connect = async () => {
-    const web3 = new Web3(window.lukso)
     let t = toast.loading('Loading...', `loading`)
 
     try {
@@ -136,6 +131,7 @@ export function AuthProvider({ children }) {
         setAccounts(_accounts)
 
         const _contextAccounts = provider.contextAccounts
+        console.log(_contextAccounts)
         updateConnected(_accounts, _contextAccounts)
       } catch (error) {
         console.error('Failed to initialize provider:', error)
@@ -166,14 +162,12 @@ export function AuthProvider({ children }) {
     }
   }, [accounts[0], contextAccounts[0], updateConnected])
 
-
   const value = {
     accounts,
     contextAccounts,
     profileConnected,
     status,
     loading,
-    provider,
     wallet,
     balance,
     setWallet,
@@ -185,6 +179,6 @@ export function AuthProvider({ children }) {
     connect,
   }
 
- // if (loading) return <Loading />
+ if (!profileConnected) return <Loading />
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

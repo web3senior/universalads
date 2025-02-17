@@ -154,11 +154,6 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
-						"name": "_end",
-						"type": "uint256"
-					},
-					{
 						"internalType": "string",
 						"name": "_metadata",
 						"type": "string"
@@ -710,11 +705,11 @@
 			]
 		},
 		"UniversalADs.sol": {
-			"keccak256": "0x37fcb61ef38ce53e73a3e3874a648c703dce6b3d432eb927780e46d3040c8971",
+			"keccak256": "0x327471d528e03f9bba21f9944a4d29a2e569c0446806f5e9a9127de0ab3f98fc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bfb96daa28542070e9febd551f579731828e0ab5f7631e479828cca6552f51b5",
-				"dweb:/ipfs/QmWP2EDiceAaQAAivpZfvSCQxWugPWaykNWkMHxgGFru4r"
+				"bzz-raw://b69073b0d857b875dcfdbb619383a4d23772471f92e84fcad726eeb4169185f5",
+				"dweb:/ipfs/QmRX2nFv21D8TrZczHXFXvtvKdvXfV5VBmzKGbEM2Pniwa"
 			]
 		},
 		"_error.sol": {

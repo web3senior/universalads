@@ -19,15 +19,16 @@ contract UniversalADs is Ownable(msg.sender), Pausable {
     using Counters for Counters.Counter;
     Counters.Counter public _claimCounter;
     uint256 public requiredFollowers = 20;
-    uint256 public fee = 4; // Owner fee
+    uint256 public fee = 1; // Owner fee
     uint256 public price = 1 ether; // Per day
     uint256 public claimPercentage = 2; // Per profile
-    uint256 public start;
     uint256 public end;
     uint256 public duration;
+    uint256 public amount;
     address public manager;
     string public metadata;
-    mapping(address => uint256) public permission;
+    address[] public permission;
+    string public constant VERSION = "1.0.0";
 
     constructor() {}
 
@@ -42,61 +43,59 @@ contract UniversalADs is Ownable(msg.sender), Pausable {
             string memory
         )
     {
-        return (start, end, duration, manager, metadata);
+        return (end, duration, amount, manager, metadata);
     }
 
-    function advertiser(
-        uint256 _start,
-        uint256 _end,
-        string memory _metadata,
-        uint256 _duration
-    )
-        public
-        payable
-        whenNotPaused
-        returns (
-            bool,
-            uint256,
-            uint256
-        )
-    {
-        require(block.timestamp > end, "There is an active ads. pls try later");
+    function advertiser(string memory _metadata, uint256 _duration) public payable whenNotPaused returns (bool, uint256) {
+        uint256 aDay = 1 days;
+        // require(block.timestamp > end, "There is an active ads. pls try later");
 
         require(_duration > 0, "Duration must be grather than 0");
 
-        // Check start
-        if (_start < block.timestamp) return (false, _start, _end);
+        // Check if there is an active ad
+        if (block.timestamp < end) revert ThereIsActiveAd(end);
 
         // Check end
-        if (_end < _start) return (false, _start, _end);
+        // if (_end < _start) return (false, _start, _end);
 
-        if (msg.value < price * _duration) revert PriceNotMet(price, _msgSender());
+        if (msg.value < price * _duration) revert PriceNotMet(price, price * _duration, _msgSender());
 
         uint256 ownerFee = calcPercentage(msg.value, fee);
         (bool success, ) = owner().call{value: ownerFee}("");
         require(success, "Failed to send Ether");
 
-        start = _start;
-        end = _end;
+        end = block.timestamp + (aDay * _duration);
         duration = _duration;
         manager = _msgSender();
         metadata = _metadata;
+        amount = price * _duration;
 
-        return (true, _start, _end);
+        delete permission;
+
+        return (true, end);
+    }
+
+    function updateAds(string memory _metadata) public whenNotPaused returns (bool) {
+        // Check start
+        if (_msgSender() != manager && end < block.timestamp) revert Unauthorized();
+        metadata = _metadata;
+
+        return true;
     }
 
     ///@notice Claim
     function claim() public whenNotPaused returns (bool) {
-        //     // Check if user is eligible?
-        //  if (IFOLLOWERSYSTEM.followerCount(_msgSender()) < requiredFollowers) revert NotEligible(_msgSender());
-        require (start > block.timestamp, "Too early");
-        if (permission[_msgSender()] > 0 && permission[_msgSender()] > start) revert UserClaimedAlready(permission[_msgSender()]);
+        require(block.timestamp < end, "There is no active ad");
+
+        for (uint256 i = 0; i < permission.length; i++) {
+            if (permission[i] == _msgSender()) revert UserClaimedAlready(_msgSender());
+        }
 
         _claimCounter.increment();
-        permission[_msgSender()] = block.timestamp;
+        permission.push(_msgSender());
 
         // send all Ether to owner
-        uint256 claimAmount = calcPercentage(address(this).balance, claimPercentage);
+        uint256 claimAmount = calcPercentage(amount, claimPercentage);
         (bool success, ) = manager.call{value: claimAmount}("");
         require(success, "Failed to send Ether");
         // Log
@@ -112,21 +111,6 @@ contract UniversalADs is Ownable(msg.sender), Pausable {
     function calcPercentage(uint256 _amount, uint256 bps) public pure returns (uint256) {
         require((_amount * bps) >= 100);
         return (_amount * bps) / 100;
-    }
-
-    /// @notice Reset permission list
-    function updateAD(
-        uint256 _start,
-        uint256 _end,
-        string memory _metadata
-    ) public onlyOwner returns (bool) {
-        // Update start and end date with new value
-        start = _start;
-        end = _end;
-        metadata = _metadata;
-
-        // Log the event
-        return true;
     }
 
     /// @notice Update token claim count

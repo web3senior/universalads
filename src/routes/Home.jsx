@@ -14,69 +14,71 @@ const contractReadOnly = new web3ReadOnly.eth.Contract(ABI, import.meta.env.VITE
 
 function Home() {
   const [isThereActiveADs, setIsThereActiveADs] = useState()
+  const [ad, setAd] = useState()
+  const [balance, setBalance] = useState()
+    const [totalClaim, setTotalClaim] = useState(0)
+  const auth = useAuth()
 
   const getNow = async () => await contract.methods.time().call()
   const getEnd = async () => await contract.methods.end().call()
+  const getTotalClaim = async () => await contract.methods._claimCounter().call()
   const getAd = async () => await contract.methods.getAD().call()
+  const getBalance = async () => await contract.methods.getBalance().call()
   const getAllEmoji = async () => await contractReadOnly.methods.getAllEmoji().call()
   const getAllUserReaction = async () => await contractReadOnly.methods.getAllUserReaction(`${auth.contextAccounts[0]}`).call()
 
   const claimFee = async (e) => {
     const t = toast.loading(`Waiting for transaction's confirmation`)
-    e.target.innerText = `Waiting...`
-    if (typeof window.lukso === 'undefined') window.open('https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn?hl=en-US&utm_source=candyzap.com', '_blank')
 
     try {
-      window.lukso
-        .request({ method: 'eth_requestAccounts' })
-        .then((accounts) => {
-          const account = accounts[0]
+      // window.lukso
+      //   .request({ method: 'eth_requestAccounts' })
+      //   .then((accounts) => {
+          const account = auth.accounts[0]
 
-          fetchGrid(account).then((res) => {
-
+          fetchGrid(account).then(async(res) => {
             if (!res) {
               toast.error(`Your wallet address is not eligible`)
               toast.dismiss(t)
               e.target.innerText = `Connect & Claim`
               return
             }
-           
-            // console.log(res[0].grid)
-            // const resres = res[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`universalads`) > -1)
-            // console.log(resres)
-            // if (resres < 1) {
-            //   toast.error(`Your wallet address is not eligible`)
-            //   toast.dismiss(t)
-            //   e.target.innerText = `Connect & Claim`
-            //   return
-            // }
+
         
+            const resres = res[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`http://localhost:5173/ad`) > -1)
+            console.log(resres)
+            if (resres < 1) {
+              toast.error(`Your wallet address is not eligible`)
+              toast.dismiss(t)
+              e.target.innerText = `Connect & Claim`
+              return
+            }
+
 
             contract.methods
-            .claim()
-            .send({
-              from: account,
-            })
-            .then((res) => {
-              console.log(res) //res.events.tokenId
-
-              // Run partyjs
-              party.confetti(document.querySelector(`.__container`), {
-                count: party.variation.range(20, 40),
-                shapes: ['coin'],
+              .claim()
+              .send({
+                from: account,
               })
+              .then((res) => {
+                console.log(res) //res.events.tokenId
 
-              toast.success(`Done`)
+                // Run partyjs
+                party.confetti(document.querySelector(`.__container`), {
+                  count: party.variation.range(20, 40),
+                  shapes: ['coin'],
+                })
 
-              e.target.innerText = `Connect & Claim`
-              toast.dismiss(t)
-            })
-            .catch((error) => {
-              e.target.innerText = `Connect & Claim`
-              toast.dismiss(t)
-            })
+                toast.success(`Done`)
 
-          })
+                e.target.innerText = `Connect & Claim`
+                toast.dismiss(t)
+              })
+              .catch((error) => {
+                e.target.innerText = `Connect & Claim`
+                toast.dismiss(t)
+              })
+          // })
         })
         .catch((error) => {
           e.target.innerText = `Connect & Claim`
@@ -92,7 +94,7 @@ function Home() {
     } catch (error) {
       console.log(error)
       toast.dismiss(t)
-      e.target.innerText = `Mint`
+      e.target.innerText = `Claim fee`
     }
   }
 
@@ -105,7 +107,7 @@ function Home() {
         .call()
         .then(async (data) => {
           console.log(data)
-          if (data===`0x`) return false
+          if (data === `0x`) return false
           data = data.substring(6, data.length)
           // console.log(data)
           //  data ="0x" + data.substring(6)
@@ -151,6 +153,7 @@ function Home() {
     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
     return new Date(date).toString()
   }
+
   const getIPFS = async (CID) => {
     //  console.log(CID)
     let requestOptions = {
@@ -163,24 +166,33 @@ function Home() {
   }
 
   useEffect(() => {
-    getNow().then((nowRes) => {
-      getEnd().then((endRes) => {
-        const now = _.toNumber(nowRes)
-        const end = _.toNumber(endRes)
-        if (end - now > 0) {
+    getTotalClaim().then((res) => {
+      console.log(res)
+      setTotalClaim(res)
+    })
+
+    getBalance().then((res) => {
+      console.log(res)
+      setBalance(_.fromWei(res))
+    })
+
+    getNow().then((now) => {
+      getAd().then(async (ad) => {
+        console.log(ad)
+        const info = await getIPFS(ad[4])
+        ad.info = info
+        setAd(ad)
+        console.log(ad)
+        if (_.toNumber(ad[0]) > _.toNumber(now)) {
           setIsThereActiveADs(true)
-          getAd().then((res) => {
-            console.log(res)
-          })
         } else setIsThereActiveADs(false)
       })
     })
   }, [])
 
-
   return (
     <div className={`${styles.page} __container`} data-width={`large`}>
-       <Toaster />
+      <Toaster />
       <header className={`${styles.header} d-flex flex-column align-items-center justify-content-between`}>
         <figure className={`ms-motion-slideDownIn ms-depth-16 rounded`}>
           <img className={styles.nft} src="/logo.svg" alt={`${import.meta.env.VITE_NAME}`} width={96} height={96} />
@@ -189,16 +201,30 @@ function Home() {
           Welcome to <span style={{ fontFamily: `var(--ff-coves)`, fontWeight: `bold` }}>{import.meta.env.VITE_NAME}</span>!
         </h3>
         <h1>Start by creating an AD</h1>
+        <small>Total claim: {totalClaim}</small>
       </header>
 
       <main className={`${styles.main}`}>
-        {!isThereActiveADs && <div className='alert alert--danger'>There is no active AD</div> }
+        {!isThereActiveADs && <div className="alert alert--danger">There is no active AD</div>}
+        {ad && (
+          <>
+            <div className={`alert alert--success`}>
+              <b>End:</b>
+              {toDate(ad[0])}
+              <br/>
+              <b>Amount:</b> 2 % of {_.fromWei(ad[2], `ether`)} $LYX | {balance} $LYX left
+            </div>
+    
+          </>
+        )}
+
         <div className={`grid grid--fit grid--gap-1`} style={{ '--data-width': `300px` }}>
           <div className={`${styles['create-card']} ms-depth-8 d-flex flex-column justify-content-between`}>
             <h2>Create Your AD</h2>
             <p>Design and launch your on-chain advertising campaign. Target your desired audience and start reaching new customers.</p>
-            <div className={`d-flex flex-column`}>
-              <a href={`/create`}>Create Ad</a>
+            <div className={`d-flex flex-row grid--gap-1`}>
+            <a className='flex-fill' href={`/create`}>Create Ad</a>
+            <a className='' href={`/update`}>Update Ad</a>
             </div>
           </div>
 
@@ -208,7 +234,9 @@ function Home() {
 
             <div className={`d-flex flex-column`}>
               <small>2% ⏣LYX of the amount</small>
-              <button onClick={(e) => claimFee(e)}>Claim Fees</button>
+              <button className="btn" onClick={(e) => claimFee(e)}>
+                Claim Fees
+              </button>
             </div>
           </div>
         </div>
