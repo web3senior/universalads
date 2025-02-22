@@ -74,7 +74,8 @@ function Ad() {
         {ad && (
          <a href={ad.info.link} target='_blank'>
   <figure>
-           <img src={`https://ipfs.io/ipfs/${ad.info.image}`} />
+           <img src={`${ad.info.image}`} />
+           {/* https://ipfs.io/ipfs/ */}
          </figure>
          </a>
         )}
