@@ -210,7 +210,7 @@ function Page() {
                         </li>
                         <li>
                           <figure>
-                            <img src={`https://ipfs.io/ipfs/${ad.info.image}`} style={{width: `200px`, height: `auto`}}/>
+                            <img src={`${ad.info.image}`} style={{width: `200px`, height: `auto`}}/>
                           </figure>
                         </li>
                       </>
