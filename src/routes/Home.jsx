@@ -7,6 +7,7 @@ import LSP0ERC725Account from '@lukso/lsp-smart-contracts/artifacts/LSP0ERC725Ac
 import toast, { Toaster } from 'react-hot-toast'
 import Web3 from 'web3'
 import Hero from './../assets/hero.svg'
+import moment from 'moment'
 import styles from './Home.module.scss'
 
 const web3ReadOnly = new Web3(import.meta.env.VITE_LUKSO_PROVIDER)
@@ -209,8 +210,8 @@ function Home() {
         {ad && (
           <>
             <div className={`alert alert--success`}>
-              <b>End:</b>
-              {toDate(ad[0])}
+              <b>Expiration: </b>
+              {moment.unix(ad[0]).utc().fromNow()}
               <br/>
               <b>Amount:</b> 2 % of {_.fromWei(ad[2], `ether`)} $LYX | {balance} $LYX left
             </div>
