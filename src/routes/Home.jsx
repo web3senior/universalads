@@ -209,7 +209,7 @@ function Home() {
         {!isThereActiveADs && <div className="alert alert--danger">There is no active AD</div>}
         {ad && (
           <>
-            <div className={`alert alert--success`}>
+            <div className={`alert alert--success`} title={moment.unix(ad[0]).utc()}>
               <b>Expiration: </b>
               {moment.unix(ad[0]).utc().fromNow()}
               <br/>
