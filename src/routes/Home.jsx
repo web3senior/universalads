@@ -38,6 +38,7 @@ function Home() {
           const account = auth.accounts[0]
 
           fetchGrid(account).then(async(res) => {
+            console.log(res)
             if (!res) {
               toast.error(`Your wallet address is not eligible`)
               toast.dismiss(t)
@@ -46,7 +47,7 @@ function Home() {
             }
 
         
-            const resres = res[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`https://universalads.vercel.app/ad`) > -1)
+            const resres = res.LSP28TheGrid[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`https://universalads.vercel.app/ad`) > -1)
             console.log(resres)
             if (resres < 1) {
               toast.error(`Your wallet address is not eligible`)
