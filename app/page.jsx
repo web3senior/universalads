@@ -171,14 +171,14 @@ const AdSlider = ({ ads }) => {
         onMouseLeave={() => setIsPaused(false)}
       >
         <section data-name={ads[activeAd].title} className={`${styles.ad__item} flex flex-column align-items-start justify-content-between gap-1`}>
-          <Link target={`_blank`} href={``} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
+          <Link target={`_blank`} href={`https://universaleverything.io/${ads[activeAd].creator}?network=mainnet`} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
             <Profile addr={ads[activeAd].creator} />
           </Link>
 
           <div className={` flex gap-050 ${styles.ad__updateLink}`}>
             {auth.walletConnected && <Claim userAddress={auth.accounts[0]} ad={ads[activeAd]} />}
 
-            <Link target={`_blank`} href={`update`} className={`flex flex-row align-items-center gap-025 `}>
+            <Link href={`update`} className={`flex flex-row align-items-center gap-025 `}>
               Update
             </Link>
           </div>
@@ -378,7 +378,7 @@ const Profile = ({ addr, createdAt }) => {
     })
   }, [addr])
 
-  if (!data || data.data) return <div className={`shimmer ${styles.shimmer}`} />
+  if (!data) return <div className={`shimmer ${styles.shimmer}`} />
   return (
     <figure className={`${styles.profile} rounded flex flex-row align-items-center justify-content-start gap-050`}>
       <div className={` ${styles.profileImageWrapper}`}>
