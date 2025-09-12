@@ -303,6 +303,9 @@ const AdSlider = ({ ads }) => {
 
           {<button onClick={(e) => claimFee(e, web3.utils.toNumber(ads[activeAd].adIndex))}>Claim</button>}
 
+     <Link target={`_blank`} href={`update`} className={`flex flex-row align-items-center gap-025  ${styles.ad__link} `}>
+            Update
+          </Link>
           <Link target={`_blank`} href={`${ads[activeAd].link}`} className={`flex flex-row align-items-center gap-025  ${styles.ad__link} `}>
             <div className={`${styles.ad__image}`} data-title={`${ads[activeAd].title}`} style={{ '--src': `url("${ads[activeAd].image}")` }} />
           </Link>
