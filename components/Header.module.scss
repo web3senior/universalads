@@ -1,0 +1,37 @@
+@use './../styles/components/responsive' as *;
+
+.header {
+  grid-row: 1/2;
+  grid-column: 1/1;
+  padding: 0 2rem;
+  height: 70px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+
+  ul {
+    height: 100%;
+
+    li {
+      flex: 1;
+
+      h1 {
+        font-weight: 900;
+        font-size: 12px;
+      }
+
+      small {
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+.logo {
+  column-gap: 0.5rem;
+
+  figure {
+    column-gap: 0.5rem;
+  }
+}

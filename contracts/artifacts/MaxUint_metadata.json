@@ -1,0 +1,68 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "getMaxValue",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A contract to demonstrate how to get the maximum value of a uint256.",
+			"kind": "dev",
+			"methods": {
+				"getMaxValue()": {
+					"details": "This function returns the maximum value that can be stored in a uint256. The `type(uint256).max` expression is the modern and recommended way to do this.",
+					"returns": {
+						"_0": "The maximum uint256 value, which is 2^256 - 1."
+					}
+				}
+			},
+			"title": "MaxUint",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"test.sol": "MaxUint"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"test.sol": {
+			"keccak256": "0xd1fdad40ae7a7934d9e12112d9e426d9cc60fc705b7e4dab9335a47ffd0d09bd",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://86e398c8fac61953cf6a33ba8ae6fd264a3d62dd5372271a79060659868254bb",
+				"dweb:/ipfs/QmbYTZ6htDed6asez8bhwbHngCS2TPFj1RvUZgVErKULW7"
+			]
+		}
+	},
+	"version": 1
+}

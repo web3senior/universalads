@@ -1,0 +1,192 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "AdHasExpired",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "DurationMustBeGreaterThanZero",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidClaimPercentage",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidFee",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidMaxAds",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidPagination",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidPrice",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "MaximumAdReached",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "required",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "sent",
+						"type": "uint256"
+					}
+				],
+				"name": "PriceNotMet",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "TransferFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "Unauthorized",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "UserClaimedAlready",
+				"type": "error"
+			}
+		],
+		"devdoc": {
+			"author": "Aratta Labs",
+			"details": "This library contains custom errors used throughout the smart contracts. Using custom errors is more gas-efficient than traditional `require` statements with string messages, as the error data is stored as a selector and is logged as part of the transaction's revert reason. This provides more granular feedback.",
+			"errors": {
+				"PriceNotMet(uint256,uint256)": [
+					{
+						"params": {
+							"required": "The total amount of LYX required.",
+							"sent": "The amount of LYX that was actually sent."
+						}
+					}
+				]
+			},
+			"kind": "dev",
+			"methods": {},
+			"title": "Errors",
+			"version": 1
+		},
+		"userdoc": {
+			"errors": {
+				"AdHasExpired()": [
+					{
+						"notice": "Thrown when a function is called on an ad that has already expired."
+					}
+				],
+				"DurationMustBeGreaterThanZero()": [
+					{
+						"notice": "Thrown when the provided ad duration is zero."
+					}
+				],
+				"InvalidClaimPercentage()": [
+					{
+						"notice": "Thrown when the owner attempts to set the claim percentage to a value greater than 100."
+					}
+				],
+				"InvalidFee()": [
+					{
+						"notice": "Thrown when the owner attempts to set a fee percentage greater than 100."
+					}
+				],
+				"InvalidMaxAds()": [
+					{
+						"notice": "Thrown when an attempt is made to set the maximum number of ads to an invalid value."
+					}
+				],
+				"InvalidPagination()": [
+					{
+						"notice": "Thrown when the provided start index or count for pagination is invalid."
+					}
+				],
+				"InvalidPrice()": [
+					{
+						"notice": "Thrown when the owner attempts to set the daily price to zero."
+					}
+				],
+				"MaximumAdReached()": [
+					{
+						"notice": "Thrown when all available ad slots are occupied and no expired ads can be replaced."
+					}
+				],
+				"PriceNotMet(uint256,uint256)": [
+					{
+						"notice": "Thrown when the user's payment is less than the required amount for the ad."
+					}
+				],
+				"TransferFailed()": [
+					{
+						"notice": "Thrown when a transfer of funds to an address fails."
+					}
+				],
+				"Unauthorized()": [
+					{
+						"notice": "Thrown when a caller does not have the necessary permissions to perform an action."
+					}
+				],
+				"UserClaimedAlready()": [
+					{
+						"notice": "Thrown when a user attempts to claim a fee from an ad they have already claimed from."
+					}
+				]
+			},
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Error.sol": "Errors"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Error.sol": {
+			"keccak256": "0xd7b249886704989434a95f5eb395f188cb61cb6f9079f9bd08aad0f150c6823b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://213dc1f9e0a2f1f96276201eaed493f0684a75afdaf513d806755c03edc49705",
+				"dweb:/ipfs/QmQ3ymph9SejdpXJfvZmyG6huR4hpgZugVeqPC8KmeSFjU"
+			]
+		}
+	},
+	"version": 1
+}

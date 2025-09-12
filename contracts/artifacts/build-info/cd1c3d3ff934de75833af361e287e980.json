@@ -1,0 +1,647 @@
+{
+	"id": "cd1c3d3ff934de75833af361e287e980",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.30",
+	"solcLongVersion": "0.8.30+commit.73712a01",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"Event.sol": {
+				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\n/// @notice Emitted when a new ad is successfully created.\r\n/// @param adId The unique ID of the ad.\r\n/// @param metadata The metadata string associated with the ad.\r\n/// @param duration The ad's duration in days.\r\n/// @param startTime The timestamp when the ad became active.\r\n/// @param endTime The timestamp when the ad will expire.\r\n/// @param creator The address of the profile that created the ad.\r\nevent AdCreated(uint256 indexed adId, string metadata, uint256 duration, uint256 startTime, uint256 endTime, address indexed creator);\r\n\r\n/// @notice Emitted when an existing ad's metadata is updated.\r\n/// @param adId The unique ID of the ad that was updated.\r\n/// @param metadata The new metadata string.\r\nevent AdUpdated(uint256 indexed adId, string metadata);\r\n\r\n/// @notice Emitted when a user successfully claims a fee from an ad.\r\n/// @param adId The unique ID of the ad from which the fee was claimed.\r\n/// @param claimer The address of the profile that claimed the fee.\r\n/// @param amount The amount of LYX (in wei) that was claimed.\r\nevent Claimed(uint256 indexed adId, address indexed claimer, uint256 amount);\r\n\r\n/// @notice Emitted when a team member's address is updated.\r\n/// @param key The name of the team member being updated.\r\n/// @param addr The new address assigned to the team member.\r\nevent TeamUpdated(string key, address addr);\r\n\r\n/// @notice Emitted when ETH is transferred from the contract's balance.\r\n/// @param recipient The address that receives the funds.\r\n/// @param amount The amount of ETH (in wei) that was withdrawn.\r\n/// @param timestamp The block timestamp at which the withdrawal occurred.\r\nevent Withdrawal(address indexed recipient, uint256 amount, uint256 timestamp);\r\n"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": false,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			},
+			"remappings": []
+		}
+	},
+	"output": {
+		"sources": {
+			"Event.sol": {
+				"ast": {
+					"absolutePath": "Event.sol",
+					"exportedSymbols": {
+						"AdCreated": [
+							16
+						],
+						"AdUpdated": [
+							23
+						],
+						"Claimed": [
+							32
+						],
+						"TeamUpdated": [
+							39
+						],
+						"Withdrawal": [
+							48
+						]
+					},
+					"id": 49,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 1,
+							"literals": [
+								"solidity",
+								"^",
+								"0.8",
+								".30"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "33:24:0"
+						},
+						{
+							"anonymous": false,
+							"documentation": {
+								"id": 2,
+								"nodeType": "StructuredDocumentation",
+								"src": "61:405:0",
+								"text": "@notice Emitted when a new ad is successfully created.\n @param adId The unique ID of the ad.\n @param metadata The metadata string associated with the ad.\n @param duration The ad's duration in days.\n @param startTime The timestamp when the ad became active.\n @param endTime The timestamp when the ad will expire.\n @param creator The address of the profile that created the ad."
+							},
+							"eventSelector": "99d681d74b6e0f68146f820c1d069c314c6db2c5bb6c4c5daaf200cbfe173e4b",
+							"id": 16,
+							"name": "AdCreated",
+							"nameLocation": "472:9:0",
+							"nodeType": "EventDefinition",
+							"parameters": {
+								"id": 15,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 4,
+										"indexed": true,
+										"mutability": "mutable",
+										"name": "adId",
+										"nameLocation": "498:4:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 16,
+										"src": "482:20:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 3,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "482:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 6,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "metadata",
+										"nameLocation": "511:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 16,
+										"src": "504:15:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_string_memory_ptr",
+											"typeString": "string"
+										},
+										"typeName": {
+											"id": 5,
+											"name": "string",
+											"nodeType": "ElementaryTypeName",
+											"src": "504:6:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 8,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "duration",
+										"nameLocation": "529:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 16,
+										"src": "521:16:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 7,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "521:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 10,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "startTime",
+										"nameLocation": "547:9:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 16,
+										"src": "539:17:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 9,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "539:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 12,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "endTime",
+										"nameLocation": "566:7:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 16,
+										"src": "558:15:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 11,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "558:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 14,
+										"indexed": true,
+										"mutability": "mutable",
+										"name": "creator",
+										"nameLocation": "591:7:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 16,
+										"src": "575:23:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 13,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "575:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "481:118:0"
+							},
+							"src": "466:134:0"
+						},
+						{
+							"anonymous": false,
+							"documentation": {
+								"id": 17,
+								"nodeType": "StructuredDocumentation",
+								"src": "604:169:0",
+								"text": "@notice Emitted when an existing ad's metadata is updated.\n @param adId The unique ID of the ad that was updated.\n @param metadata The new metadata string."
+							},
+							"eventSelector": "c688c5682a7ba49a2411d46ce4112f0aa517dc21171e33f357359e8559b535b2",
+							"id": 23,
+							"name": "AdUpdated",
+							"nameLocation": "779:9:0",
+							"nodeType": "EventDefinition",
+							"parameters": {
+								"id": 22,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 19,
+										"indexed": true,
+										"mutability": "mutable",
+										"name": "adId",
+										"nameLocation": "805:4:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 23,
+										"src": "789:20:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 18,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "789:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 21,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "metadata",
+										"nameLocation": "818:8:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 23,
+										"src": "811:15:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_string_memory_ptr",
+											"typeString": "string"
+										},
+										"typeName": {
+											"id": 20,
+											"name": "string",
+											"nodeType": "ElementaryTypeName",
+											"src": "811:6:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "788:39:0"
+							},
+							"src": "773:55:0"
+						},
+						{
+							"anonymous": false,
+							"documentation": {
+								"id": 24,
+								"nodeType": "StructuredDocumentation",
+								"src": "832:277:0",
+								"text": "@notice Emitted when a user successfully claims a fee from an ad.\n @param adId The unique ID of the ad from which the fee was claimed.\n @param claimer The address of the profile that claimed the fee.\n @param amount The amount of LYX (in wei) that was claimed."
+							},
+							"eventSelector": "4ec90e965519d92681267467f775ada5bd214aa92c0dc93d90a5e880ce9ed026",
+							"id": 32,
+							"name": "Claimed",
+							"nameLocation": "1115:7:0",
+							"nodeType": "EventDefinition",
+							"parameters": {
+								"id": 31,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 26,
+										"indexed": true,
+										"mutability": "mutable",
+										"name": "adId",
+										"nameLocation": "1139:4:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 32,
+										"src": "1123:20:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 25,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "1123:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 28,
+										"indexed": true,
+										"mutability": "mutable",
+										"name": "claimer",
+										"nameLocation": "1161:7:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 32,
+										"src": "1145:23:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 27,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "1145:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 30,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "amount",
+										"nameLocation": "1178:6:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 32,
+										"src": "1170:14:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 29,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "1170:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "1122:63:0"
+							},
+							"src": "1109:77:0"
+						},
+						{
+							"anonymous": false,
+							"documentation": {
+								"id": 33,
+								"nodeType": "StructuredDocumentation",
+								"src": "1190:183:0",
+								"text": "@notice Emitted when a team member's address is updated.\n @param key The name of the team member being updated.\n @param addr The new address assigned to the team member."
+							},
+							"eventSelector": "a55bfbf28b3e4791376d4e67253f1743a34a31a8824092ec7dda235c4c5c6ec1",
+							"id": 39,
+							"name": "TeamUpdated",
+							"nameLocation": "1379:11:0",
+							"nodeType": "EventDefinition",
+							"parameters": {
+								"id": 38,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 35,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "key",
+										"nameLocation": "1398:3:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 39,
+										"src": "1391:10:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_string_memory_ptr",
+											"typeString": "string"
+										},
+										"typeName": {
+											"id": 34,
+											"name": "string",
+											"nodeType": "ElementaryTypeName",
+											"src": "1391:6:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 37,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "addr",
+										"nameLocation": "1411:4:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 39,
+										"src": "1403:12:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 36,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "1403:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "1390:26:0"
+							},
+							"src": "1373:44:0"
+						},
+						{
+							"anonymous": false,
+							"documentation": {
+								"id": 40,
+								"nodeType": "StructuredDocumentation",
+								"src": "1421:275:0",
+								"text": "@notice Emitted when ETH is transferred from the contract's balance.\n @param recipient The address that receives the funds.\n @param amount The amount of ETH (in wei) that was withdrawn.\n @param timestamp The block timestamp at which the withdrawal occurred."
+							},
+							"eventSelector": "df273cb619d95419a9cd0ec88123a0538c85064229baa6363788f743fff90deb",
+							"id": 48,
+							"name": "Withdrawal",
+							"nameLocation": "1702:10:0",
+							"nodeType": "EventDefinition",
+							"parameters": {
+								"id": 47,
+								"nodeType": "ParameterList",
+								"parameters": [
+									{
+										"constant": false,
+										"id": 42,
+										"indexed": true,
+										"mutability": "mutable",
+										"name": "recipient",
+										"nameLocation": "1729:9:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 48,
+										"src": "1713:25:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										},
+										"typeName": {
+											"id": 41,
+											"name": "address",
+											"nodeType": "ElementaryTypeName",
+											"src": "1713:7:0",
+											"stateMutability": "nonpayable",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 44,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "amount",
+										"nameLocation": "1748:6:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 48,
+										"src": "1740:14:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 43,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "1740:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									},
+									{
+										"constant": false,
+										"id": 46,
+										"indexed": false,
+										"mutability": "mutable",
+										"name": "timestamp",
+										"nameLocation": "1764:9:0",
+										"nodeType": "VariableDeclaration",
+										"scope": 48,
+										"src": "1756:17:0",
+										"stateVariable": false,
+										"storageLocation": "default",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										},
+										"typeName": {
+											"id": 45,
+											"name": "uint256",
+											"nodeType": "ElementaryTypeName",
+											"src": "1756:7:0",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint256",
+												"typeString": "uint256"
+											}
+										},
+										"visibility": "internal"
+									}
+								],
+								"src": "1712:62:0"
+							},
+							"src": "1696:79:0"
+						}
+					],
+					"src": "33:1744:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}

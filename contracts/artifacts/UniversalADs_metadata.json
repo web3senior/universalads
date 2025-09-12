@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.28+commit.7893614a"
+		"version": "0.8.30+commit.73712a01"
 	},
 	"language": "Solidity",
 	"output": {
@@ -12,12 +12,47 @@
 			},
 			{
 				"inputs": [],
+				"name": "AdHasExpired",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "DurationMustBeGreaterThanZero",
+				"type": "error"
+			},
+			{
+				"inputs": [],
 				"name": "EnforcedPause",
 				"type": "error"
 			},
 			{
 				"inputs": [],
 				"name": "ExpectedPause",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidClaimPercentage",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidFee",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidPagination",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidPrice",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "MaximumAdReached",
 				"type": "error"
 			},
 			{
@@ -46,32 +81,21 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "required",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "sent",
 						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"name": "PriceNotMet",
 				"type": "error"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "end",
-						"type": "uint256"
-					}
-				],
-				"name": "ThereIsActiveAd",
+				"inputs": [],
+				"name": "TransferFailed",
 				"type": "error"
 			},
 			{
@@ -80,13 +104,7 @@
 				"type": "error"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
+				"inputs": [],
 				"name": "UserClaimedAlready",
 				"type": "error"
 			},
@@ -94,9 +112,77 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "adId",
+						"type": "uint256"
+					},
+					{
 						"indexed": false,
+						"internalType": "string",
+						"name": "metadata",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "endTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
 						"internalType": "address",
-						"name": "sender",
+						"name": "creator",
+						"type": "address"
+					}
+				],
+				"name": "AdCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "adId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "metadata",
+						"type": "string"
+					}
+				],
+				"name": "AdUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "adId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "claimer",
 						"type": "address"
 					},
 					{
@@ -146,12 +232,56 @@
 				"inputs": [
 					{
 						"indexed": false,
+						"internalType": "string",
+						"name": "key",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "TeamUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
 						"internalType": "address",
 						"name": "account",
 						"type": "address"
 					}
 				],
 				"name": "Unpaused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"name": "Withdrawal",
 				"type": "event"
 			},
 			{
@@ -168,55 +298,64 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "_claimCounter",
-				"outputs": [
+				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_value",
+						"name": "",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
+				"name": "ads",
+				"outputs": [
 					{
 						"internalType": "string",
-						"name": "_metadata",
+						"name": "metadata",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "image",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "link",
 						"type": "string"
 					},
 					{
 						"internalType": "uint256",
-						"name": "_duration",
+						"name": "startTime",
 						"type": "uint256"
-					}
-				],
-				"name": "advertiser",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
 					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "endTime",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "amount",
-				"outputs": [
+					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "claimCounter",
 						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "createdAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -226,68 +365,18 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "bps",
+						"name": "_index",
 						"type": "uint256"
 					}
 				],
-				"name": "calcPercentage",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "pure",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "claim",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
+				"name": "claimFee",
+				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
 				"name": "claimPercentage",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "duration",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "end",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -312,75 +401,154 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_startIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_count",
+						"type": "uint256"
+					}
+				],
+				"name": "getADs",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "adIndex",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "metadata",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "image",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "link",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "claimCounter",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "createdAt",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "duration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "creator",
+								"type": "address"
+							}
+						],
+						"internalType": "struct UniversalADs.ADWithoutMappings[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
-				"name": "getAD",
+				"name": "getAdLength",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					},
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "hasSpace",
+				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "uint8",
 						"name": "",
-						"type": "uint256"
-					},
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
+						"internalType": "string",
+						"name": "_metadata",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "",
+						"name": "_title",
 						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getBalance",
-				"outputs": [
+					},
+					{
+						"internalType": "string",
+						"name": "_image",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_link",
+						"type": "string"
+					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_duration",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "manager",
+				"name": "newAd",
 				"outputs": [
 					{
-						"internalType": "address",
+						"internalType": "bool",
 						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "metadata",
-				"outputs": [
+						"type": "bool"
+					},
 					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "adId",
+						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -417,25 +585,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "permission",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "price",
 				"outputs": [
@@ -456,47 +605,22 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "requiredFollowers",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "time",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
-						"internalType": "address payable",
-						"name": "_to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_amount",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "",
+						"type": "string"
 					}
 				],
-				"name": "transferBalance",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"name": "team",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -522,19 +646,33 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "_index",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
 						"name": "_metadata",
 						"type": "string"
-					}
-				],
-				"name": "updateAds",
-				"outputs": [
+					},
 					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
+						"internalType": "string",
+						"name": "_title",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_image",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_link",
+						"type": "string"
 					}
 				],
+				"name": "updateAd",
+				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -542,24 +680,62 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_newVal",
+						"name": "_newClaimPercentage",
 						"type": "uint256"
 					}
 				],
 				"name": "updateClaimPercentage",
-				"outputs": [
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
 					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
+						"internalType": "uint256",
+						"name": "_newFee",
+						"type": "uint256"
 					}
 				],
+				"name": "updateFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_newPrice",
+						"type": "uint256"
+					}
+				],
+				"name": "updatePrice",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					}
+				],
+				"name": "updateTeam",
+				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "withdraw",
+				"name": "withdrawAll",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -569,7 +745,7 @@
 			"author": "Aratta Labs",
 			"custom:emoji": "📢",
 			"custom:security-contact": "atenyun@gmail.com",
-			"details": "You will find the deployed contract addresses in the repo",
+			"details": "This contract manages the creation, updating, and claiming of ads. It supports a fixed number of active ads and allows expired ad slots to be reused.",
 			"errors": {
 				"EnforcedPause()": [
 					{
@@ -590,29 +766,107 @@
 					{
 						"details": "The caller account is not authorized to perform an operation."
 					}
+				],
+				"PriceNotMet(uint256,uint256)": [
+					{
+						"params": {
+							"required": "The total amount of LYX required.",
+							"sent": "The amount of LYX that was actually sent."
+						}
+					}
 				]
 			},
 			"events": {
+				"AdCreated(uint256,string,uint256,uint256,uint256,address)": {
+					"params": {
+						"adId": "The unique ID of the ad.",
+						"creator": "The address of the profile that created the ad.",
+						"duration": "The ad's duration in days.",
+						"endTime": "The timestamp when the ad will expire.",
+						"metadata": "The metadata string associated with the ad.",
+						"startTime": "The timestamp when the ad became active."
+					}
+				},
+				"AdUpdated(uint256,string)": {
+					"params": {
+						"adId": "The unique ID of the ad that was updated.",
+						"metadata": "The new metadata string."
+					}
+				},
+				"Claimed(uint256,address,uint256)": {
+					"params": {
+						"adId": "The unique ID of the ad from which the fee was claimed.",
+						"amount": "The amount of LYX (in wei) that was claimed.",
+						"claimer": "The address of the profile that claimed the fee."
+					}
+				},
 				"Paused(address)": {
 					"details": "Emitted when the pause is triggered by `account`."
 				},
+				"TeamUpdated(string,address)": {
+					"params": {
+						"addr": "The new address assigned to the team member.",
+						"key": "The name of the team member being updated."
+					}
+				},
 				"Unpaused(address)": {
 					"details": "Emitted when the pause is lifted by `account`."
+				},
+				"Withdrawal(address,uint256,uint256)": {
+					"params": {
+						"amount": "The amount of ETH (in wei) that was withdrawn.",
+						"recipient": "The address that receives the funds.",
+						"timestamp": "The block timestamp at which the withdrawal occurred."
+					}
 				}
 			},
 			"kind": "dev",
 			"methods": {
-				"calcPercentage(uint256,uint256)": {
+				"claimFee(uint256)": {
+					"details": "The function checks that the ad is active and that the caller has not already claimed a fee for it. It then calculates and transfers the claim amount to the user.",
 					"params": {
-						"_amount": "The total amount",
-						"bps": "The precentage"
+						"_index": "The index of the ad to claim from in the `ads` array."
+					}
+				},
+				"getADs(uint256,uint256)": {
+					"details": "This function returns an array of `ADWithoutMappings` structs to avoid returning the internal `claimed` mapping.",
+					"params": {
+						"_count": "The number of ads to retrieve.",
+						"_startIndex": "The starting index of the ad list to retrieve."
 					},
 					"returns": {
-						"_0": "percentage"
+						"_0": "An array of `ADWithoutMappings` structs."
+					}
+				},
+				"getAdLength()": {
+					"returns": {
+						"_0": "The length of the `ads` array."
+					}
+				},
+				"hasSpace()": {
+					"returns": {
+						"_0": "The length of the `ads` array."
+					}
+				},
+				"newAd(string,string,string,string,uint256)": {
+					"details": "The function first checks for an expired ad slot to overwrite to optimize space. If no expired slots are found and the ad array is full, the transaction will revert. It ensures the caller has sent enough LUKSO to cover the cost, and then transfers the fees to the owner and team.",
+					"params": {
+						"_duration": "The duration of the ad in days.",
+						"_image": "The URL of the ad image.",
+						"_link": "The external link for the ad's call-to-action.",
+						"_metadata": "A JSON string containing the ad's content metadata.",
+						"_title": "The title of the ad."
+					},
+					"returns": {
+						"_0": "bool Returns true if the ad was successfully created or replaced.",
+						"adId": "The index of the newly created or replaced ad in the `ads` array."
 					}
 				},
 				"owner()": {
 					"details": "Returns the address of the current owner."
+				},
+				"pause()": {
+					"details": "Only the contract owner can call this function."
 				},
 				"paused()": {
 					"details": "Returns true if the contract is paused, and false otherwise."
@@ -622,40 +876,199 @@
 				},
 				"transferOwnership(address)": {
 					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				},
+				"unpause()": {
+					"details": "Only the contract owner can call this function."
+				},
+				"updateAd(uint256,string,string,string,string)": {
+					"details": "This function can only be called by the original ad creator, and only while the ad is still active.",
+					"params": {
+						"_image": "The new URL of the ad image.",
+						"_index": "The index of the ad to update in the `ads` array.",
+						"_link": "The new external link for the ad's call-to-action.",
+						"_metadata": "The new metadata string.",
+						"_title": "The new title of the ad."
+					}
+				},
+				"updateClaimPercentage(uint256)": {
+					"details": "Only the contract owner can call this function. The new percentage must be between 0 and 100.",
+					"params": {
+						"_newClaimPercentage": "The new claim percentage (0-100)."
+					}
+				},
+				"updateFee(uint256)": {
+					"details": "Only the contract owner can call this function. The new fee must be between 0 and 100.",
+					"params": {
+						"_newFee": "The new fee percentage (0-100)."
+					}
+				},
+				"updatePrice(uint256)": {
+					"details": "Only the contract owner can call this function. The new price must be greater than zero.",
+					"params": {
+						"_newPrice": "The new price in wei."
+					}
+				},
+				"updateTeam(string,address)": {
+					"details": "Only the contract owner can call this function.",
+					"params": {
+						"_addr": "The new address for the team member.",
+						"_name": "The name of the team member."
+					}
+				},
+				"withdrawAll()": {
+					"details": "This function can only be called by the contract owner and is non-reentrant."
+				}
+			},
+			"stateVariables": {
+				"ads": {
+					"details": "A fixed-size array to hold the ads. The size is set to 2."
+				},
+				"claimPercentage": {
+					"details": "The value ranges from 0-100."
+				},
+				"fee": {
+					"details": "The value ranges from 0-100."
+				},
+				"price": {
+					"details": "The value is denominated in wei."
+				},
+				"team": {
+					"details": "A mapping from team member's name to their address."
 				}
 			},
 			"title": "UniversalADs",
 			"version": 1
 		},
 		"userdoc": {
-			"kind": "user",
-			"methods": {
-				"calcPercentage(uint256,uint256)": {
-					"notice": "calcPercentage percentage"
+			"errors": {
+				"AdHasExpired()": [
+					{
+						"notice": "Thrown when a function is called on an ad that has already expired."
+					}
+				],
+				"DurationMustBeGreaterThanZero()": [
+					{
+						"notice": "Thrown when the provided ad duration is zero."
+					}
+				],
+				"InvalidClaimPercentage()": [
+					{
+						"notice": "Thrown when the owner attempts to set the claim percentage to a value greater than 100."
+					}
+				],
+				"InvalidFee()": [
+					{
+						"notice": "Thrown when the owner attempts to set a fee percentage greater than 100."
+					}
+				],
+				"InvalidPagination()": [
+					{
+						"notice": "Thrown when the provided start index or count for pagination is invalid."
+					}
+				],
+				"InvalidPrice()": [
+					{
+						"notice": "Thrown when the owner attempts to set the daily price to zero."
+					}
+				],
+				"MaximumAdReached()": [
+					{
+						"notice": "Thrown when all available ad slots are occupied and no expired ads can be replaced."
+					}
+				],
+				"PriceNotMet(uint256,uint256)": [
+					{
+						"notice": "Thrown when the user's payment is less than the required amount for the ad."
+					}
+				],
+				"TransferFailed()": [
+					{
+						"notice": "Thrown when a transfer of funds to an address fails."
+					}
+				],
+				"Unauthorized()": [
+					{
+						"notice": "Thrown when a caller does not have the necessary permissions to perform an action."
+					}
+				],
+				"UserClaimedAlready()": [
+					{
+						"notice": "Thrown when a user attempts to claim a fee from an ad they have already claimed from."
+					}
+				]
+			},
+			"events": {
+				"AdCreated(uint256,string,uint256,uint256,uint256,address)": {
+					"notice": "Emitted when a new ad is successfully created."
 				},
-				"claim()": {
-					"notice": "Claim"
+				"AdUpdated(uint256,string)": {
+					"notice": "Emitted when an existing ad's metadata is updated."
 				},
-				"getBalance()": {
-					"notice": "Return the balance of this contract"
+				"Claimed(uint256,address,uint256)": {
+					"notice": "Emitted when a user successfully claims a fee from an ad."
 				},
-				"pause()": {
-					"notice": "Pause"
+				"TeamUpdated(string,address)": {
+					"notice": "Emitted when a team member's address is updated."
 				},
-				"transferBalance(address,uint256)": {
-					"notice": "Transfer balance from this contract to input address"
-				},
-				"unpause()": {
-					"notice": "Unpause"
-				},
-				"updateClaimPercentage(uint256)": {
-					"notice": "Update token claim count"
-				},
-				"withdraw()": {
-					"notice": "Withdraw the balance from this contract and transfer it to the owner's address"
+				"Withdrawal(address,uint256,uint256)": {
+					"notice": "Emitted when ETH is transferred from the contract's balance."
 				}
 			},
-			"notice": "UniversalADs",
+			"kind": "user",
+			"methods": {
+				"VERSION()": {
+					"notice": "The version of the smart contract."
+				},
+				"claimFee(uint256)": {
+					"notice": "Allows a user to claim a fee from an ad's revenue."
+				},
+				"claimPercentage()": {
+					"notice": "The percentage of the ad value that a profile can claim."
+				},
+				"fee()": {
+					"notice": "The fee percentage for the contract owner."
+				},
+				"getADs(uint256,uint256)": {
+					"notice": "Retrieves a paginated list of ads."
+				},
+				"getAdLength()": {
+					"notice": "Returns the total number of ads in the fixed-size array."
+				},
+				"hasSpace()": {
+					"notice": "Returns the total number of empty ads."
+				},
+				"newAd(string,string,string,string,uint256)": {
+					"notice": "Creates a new ad with specified metadata and duration."
+				},
+				"pause()": {
+					"notice": "Pauses contract operations."
+				},
+				"price()": {
+					"notice": "The price for a single day of advertising."
+				},
+				"unpause()": {
+					"notice": "Unpauses contract operations."
+				},
+				"updateAd(uint256,string,string,string,string)": {
+					"notice": "Updates the metadata for an existing ad."
+				},
+				"updateClaimPercentage(uint256)": {
+					"notice": "Updates the claim percentage for each profile."
+				},
+				"updateFee(uint256)": {
+					"notice": "Updates the owner fee percentage."
+				},
+				"updatePrice(uint256)": {
+					"notice": "Updates the price per day for a new ad."
+				},
+				"updateTeam(string,address)": {
+					"notice": "Updates a team member's address."
+				},
+				"withdrawAll()": {
+					"notice": "Transfers the entire contract's ETH balance to the contract owner."
+				}
+			},
+			"notice": "A decentralized ad network on the LUKSO blockchain where Universal Profiles can monetize their presence by displaying ads.",
 			"version": 1
 		}
 	},
@@ -663,7 +1076,7 @@
 		"compilationTarget": {
 			"UniversalADs.sol": "UniversalADs"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "prague",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -675,84 +1088,92 @@
 		"remappings": []
 	},
 	"sources": {
-		"@openzeppelin/contracts/utils/Context.sol": {
-			"keccak256": "0xa92e4fa126feb6907daa0513ddd816b2eb91f30a808de54f63c17d0e162c3439",
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a367861093b74443b137564d3f3c472f70bcf114739e62059c939f25e315706c",
-				"dweb:/ipfs/Qmd7JMpcxD9RuQjK3uM3EzJUgSqdN8vzp8eytEiuwxQJ6h"
+				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
+				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
 			]
 		},
-		"@openzeppelin/contracts/utils/Counters.sol": {
-			"keccak256": "0xf0018c2440fbe238dd3a8732fa8e17a0f9dce84d31451dc8a32f6d62b349c9f1",
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://59e1c62884d55b70f3ae5432b44bb3166ad71ae3acd19c57ab6ddc3c87c325ee",
-				"dweb:/ipfs/QmezuXg5GK5oeA4F91EZhozBFekhq5TD966bHPH18cCqhu"
+				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+			]
+		},
+		"@openzeppelin/contracts/utils/Panic.sol": {
+			"keccak256": "0xf7fe324703a64fc51702311dc51562d5cb1497734f074e4f483bfb6717572d7a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c6a5ff4f9fd8649b7ee20800b7fa387d3465bd77cf20c2d1068cd5c98e1ed57a",
+				"dweb:/ipfs/QmVSaVJf9FXFhdYEYeCEfjMVHrxDh5qL4CGkxdMWpQCrqG"
+			]
+		},
+		"@openzeppelin/contracts/utils/Pausable.sol": {
+			"keccak256": "0xdb484371dfbb848cb6f5d70464e9ac9b2900e4164ead76bbce4fef0b44bcc68f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f9d6f6f6600a2bec622f699081b58350873b5e63ce05464d17d674a290bb8a7c",
+				"dweb:/ipfs/QmQKVzSQY1PM3Bid4QhgVVZyx6B4Jx7XgaQzLKHj38vJz8"
 			]
 		},
 		"@openzeppelin/contracts/utils/Strings.sol": {
-			"keccak256": "0x3088eb2868e8d13d89d16670b5f8612c4ab9ff8956272837d8e90106c59c14a0",
+			"keccak256": "0xad148d59f05165f9217d0a9e1ac8f772abb02ea6aaad8a756315c532bf79f9f4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b81d9ff6559ea5c47fc573e17ece6d9ba5d6839e213e6ebc3b4c5c8fe4199d7f",
-				"dweb:/ipfs/QmPCW1bFisUzJkyjroY3yipwfism9RRCigCcK1hbXtVM8n"
+				"bzz-raw://15e3599867c2182f5831e9268b274b2ef2047825837df6b4d81c9e89254b093e",
+				"dweb:/ipfs/QmZbL7XAYr5RmaNaooPgZRmcDXaudfsYQfYD9y5iAECvpS"
 			]
 		},
 		"@openzeppelin/contracts/utils/math/Math.sol": {
-			"keccak256": "0xe4455ac1eb7fc497bb7402579e7b4d64d928b846fce7d2b6fde06d366f21c2b3",
+			"keccak256": "0x1225214420c83ebcca88f2ae2b50f053aaa7df7bd684c3e878d334627f2edfc6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cc8841b3cd48ad125e2f46323c8bad3aa0e88e399ec62acb9e57efa7e7c8058c",
-				"dweb:/ipfs/QmSqE4mXHA2BXW58deDbXE8MTcsL5JSKNDbm23sVQxRLPS"
+				"bzz-raw://6c5fab4970634f9ab9a620983dc1c8a30153981a0b1a521666e269d0a11399d3",
+				"dweb:/ipfs/QmVRnBC575MESGkEHndjujtR7qub2FzU9RWy9eKLp4hPZB"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SafeCast.sol": {
+			"keccak256": "0x195533c86d0ef72bcc06456a4f66a9b941f38eb403739b00f21fd7c1abd1ae54",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b1d578337048cad08c1c03041cca5978eff5428aa130c781b271ad9e5566e1f8",
+				"dweb:/ipfs/QmPFKL2r9CBsMwmUqqdcFPfHZB2qcs9g1HDrPxzWSxomvy"
 			]
 		},
 		"@openzeppelin/contracts/utils/math/SignedMath.sol": {
-			"keccak256": "0xf92515413956f529d95977adc9b0567d583c6203fc31ab1c23824c35187e3ddc",
+			"keccak256": "0xb1970fac7b64e6c09611e6691791e848d5e3fe410fa5899e7df2e0afd77a99e3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c50fcc459e49a9858b6d8ad5f911295cb7c9ab57567845a250bf0153f84a95c7",
-				"dweb:/ipfs/QmcEW85JRzvDkQggxiBBLVAasXWdkhEysqypj9EaB6H2g6"
+				"bzz-raw://db5fbb3dddd8b7047465b62575d96231ba8a2774d37fb4737fbf23340fabbb03",
+				"dweb:/ipfs/QmVUSvooZKEdEdap619tcJjTLcAuH6QBdZqAzWwnAXZAWJ"
+			]
+		},
+		"Error.sol": {
+			"keccak256": "0xd7b249886704989434a95f5eb395f188cb61cb6f9079f9bd08aad0f150c6823b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://213dc1f9e0a2f1f96276201eaed493f0684a75afdaf513d806755c03edc49705",
+				"dweb:/ipfs/QmQ3ymph9SejdpXJfvZmyG6huR4hpgZugVeqPC8KmeSFjU"
+			]
+		},
+		"Event.sol": {
+			"keccak256": "0xd06a13931c6bfc94b11ce37be7d5acde86ac2a773be94f332b0018ac17a1963b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1a318cb882114a24159f7d7fa865dbf7eaca1bb7453f6de955f10ff4a1793e8d",
+				"dweb:/ipfs/QmPoe3NRgojXLrUujzXK7voSwDTKbHJacqWHpefY4CcS8E"
 			]
 		},
 		"UniversalADs.sol": {
-			"keccak256": "0x06b2bde5f49c1769338ab4d33ab2eb11a49b49ae828655229f479a468d2a4e2b",
+			"keccak256": "0xe663f40b60644333f7d7555b23060f6411310bf988551da74e2b47c07999f9f6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://58a296d517028f8688b0966cab1cfb79aaf8d15e83319719a4d10cd84e7d424f",
-				"dweb:/ipfs/Qme93iPfcXicSbM9iswePoEYd9wwa1KbtiHN7eQvhdmxpn"
-			]
-		},
-		"_error.sol": {
-			"keccak256": "0x625a68048eb6a3e4a7793c5d51bf0543e35eb5151f099fa84b4557bc0bdee617",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://f6b3e9ce5373689b22b660db6f3aea8127aa7270cbcac02e3a6b6efef853bb6c",
-				"dweb:/ipfs/QmQdrsRwSE9WFzXNgtuiYrrzSyzByJN2wHcn554QkP8Jbw"
-			]
-		},
-		"_event.sol": {
-			"keccak256": "0xbb93f756014694560f191e5c6f51b773899845fb4e59b0b7a1e51fac456d5ce6",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://a250f70db7261016f9f5d5a495c70679817d019baae89150ed108bb6a50f03c5",
-				"dweb:/ipfs/QmWWHanihmRTd9rpxBdHnB664cpTJYxUFjtywG5eN1UFnW"
-			]
-		},
-		"_ownable.sol": {
-			"keccak256": "0xd0eb4b66f1088976a798a35ea6f276723448d778c424898ed9a3895dd16e0395",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://d7ff7967a53aa14549700c15740d8afa60437287dfbdd386fa338001156afcfd",
-				"dweb:/ipfs/QmNqebzo3Jex1uFWNTRh3p185YkVZtt28Rsv1mB2nfBWBw"
-			]
-		},
-		"_pausable.sol": {
-			"keccak256": "0xbcfe48dd83c79dc58f3e692bf0c564ca9732a9782290fbc463b51866075fda5e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://ef18a3571179803f34e036529e8e0249a24aa86f315a6425bff7a12e08a2466a",
-				"dweb:/ipfs/QmPcB7VKFa6S4Me9a7cxa8ukA5HZfr86uDyDeDrjJqetqe"
+				"bzz-raw://a35bcb2089cde82a92e5da1dd9009eec430242bec15e0be07a35c5d023224318",
+				"dweb:/ipfs/QmPq4eDsaXFrbcnRVoUyVc9t6YvyuJve2X35CkoTLxGeki"
 			]
 		}
 	},
