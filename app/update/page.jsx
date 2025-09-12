@@ -3,16 +3,7 @@
 import { useState, useEffect, useId, useRef } from 'react'
 import Link from 'next/link'
 import moment from 'moment'
-import arattalabs from '@/public/arattalabs.svg'
-import upIcon from '@/public/icons/up.png'
-import dotIcon from '@/public/icons/dot.svg'
-import themeIcon from '@/public/icons/theme.svg'
-import logo from '@/public/logo.svg'
-
-import blueCheckMarkIcon from '@/public/icons/blue-checkmark.svg'
 import { initContract, getPrice, getADs, getAdCounter } from '@/util/communication'
-import { getProfile } from '@/util/api'
-import PollTimer from '@/components/PollTimer'
 import Web3 from 'web3'
 import ABI from '@/abi/universalads.json'
 import { useUpProvider } from '@/contexts/UpProvider'
@@ -45,10 +36,11 @@ const pinata = new PinataSDK({
 })
 
 export default function Page() {
-  const [duration, setDuration] = useState()
+  const [modal, setModal] = useState('')
   const [adCounter, setAdCounter] = useState()
   const [price, setPrice] = useState()
-  const [ads, setAds] = useState()
+  const [adSpace, setAdSpace] = useState()
+  const [ads, setAds] = useState([])
   const { web3, contract } = initContract()
   const giftModal = useRef()
   const giftModalSendButton = useRef()
@@ -107,12 +99,16 @@ toast.success(`Updated`)
   useEffect(() => {
     // console.log(auth.accounts)
 
-    getAdCounter().then((adCounter) => {
-      setAdCounter(web3.utils.toNumber(adCounter))
-      if (web3.utils.toNumber(adCounter) > 0) {
-        getADs(1, adCounter).then((res) => {
-          setAds(res)
+
+    getAdLength().then((adLength) => {
+      setAdCounter(web3.utils.toNumber(adLength))
+      if (web3.utils.toNumber(adLength) > 0) {
+        getADs(0, adLength).then((res) => {
           console.log(res)
+          if (res.length > 0) {
+            const adData = res.filter((filterItem) => filterItem.creator !== `0x0000000000000000000000000000000000000000`)
+            setAds(adData)
+          }
         })
       }
     })

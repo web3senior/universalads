@@ -2,15 +2,12 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import toast, { Toaster } from 'react-hot-toast'
-import { Suspense } from 'react'
+import toast from 'react-hot-toast'
 import { useEffect, useState } from 'react'
-import { useFormStatus } from 'react-dom'
 import ABI from '@/abi/LukSeals.json'
 import ABILSP7 from '@/abi/lsp7.json'
 import Web3 from 'web3'
 import { initContract, getEmoji, getReaction } from '@/util/communication'
-import moment from 'moment-timezone'
 import { useUpProvider } from '@/contexts/UpProvider'
 import styles from './page.module.scss'
 

@@ -9,7 +9,6 @@ import logo from '@/public/logo.svg'
 import { toast } from 'react-hot-toast'
 import { initContract, getPrice, getADs, getAdLength, hasSpace } from '@/util/communication'
 import { getProfile } from '@/util/api'
-import PollTimer from '@/components/PollTimer'
 import Web3 from 'web3'
 import ABI from '@/abi/universalads.json'
 import LSP0ERC725Account from '@/abi/LSP0ERC725Account.json'
@@ -53,81 +52,6 @@ export default function Page() {
   const giftModalCancelButton = useRef()
   const giftModalMessage = useRef()
   const auth = useUpProvider()
-
-  const claimFee = async (e, adId) => {
-    const t = toast.loading(`Waiting for transaction's confirmation`)
-
-    try {
-      // window.lukso
-      //   .request({ method: 'eth_requestAccounts' })
-      //   .then((accounts) => {
-      const account = auth.accounts[0]
-
-      fetchGrid(account)
-        .then(async (res) => {
-          console.log(res)
-          if (!res) {
-            toast.error(`Your wallet address is not eligible`)
-            toast.dismiss(t)
-            e.target.innerText = `Claim`
-            return
-          }
-
-          const resres = res.LSP28TheGrid[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`https://universalads.vercel.app/ad`) > -1)
-          console.log(resres)
-          if (resres < 1) {
-            toast.error(`Your wallet address is not eligible`)
-            toast.dismiss(t)
-            e.target.innerText = `Claim`
-            return
-          }
-
-          const web3 = new Web3(auth.provider)
-
-          // Create a Contract instance
-          const contract = new web3.eth.Contract(ABI, process.env.NEXT_PUBLIC_CONTRACT)
-          contract.methods
-            .claimFee(adId)
-            .send({
-              from: account,
-            })
-            .then((res) => {
-              console.log(res) //res.events.tokenId
-
-              // Run partyjs
-              // party.confetti(document.querySelector(`.__container`), {
-              //   count: party.variation.range(20, 40),
-              //   shapes: ['coin'],
-              // })
-
-              toast.success(`Done`)
-
-              e.target.innerText = `Claim`
-              toast.dismiss(t)
-            })
-            .catch((error) => {
-              e.target.innerText = `Claim`
-              toast.dismiss(t)
-            })
-          // })
-        })
-        .catch((error) => {
-          e.target.innerText = `Claim`
-          // Handle error
-          console.log(error, error.code)
-          toast.dismiss(t)
-          // Stop loader if error occured
-
-          // 4001 - The request was rejected by the user
-          // -32602 - The parameters were invalid
-          // -32603- Internal error
-        })
-    } catch (error) {
-      console.log(error)
-      toast.dismiss(t)
-      e.target.innerText = `Claim fee`
-    }
-  }
 
   const fetchGrid = async (addr) => {
     //console.log(addr)
@@ -231,7 +155,7 @@ export default function Page() {
             <div className={`relative`}>
               <section data-name={``} className={`${styles.ad__item} flex flex-column align-items-start justify-content-between gap-1`}>
                 <Link target={`_blank`} href={``} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
-                  <Profile addr={`0xe4dAc493FC79373936AAba777b58ED60A8eF5834`} />
+                  <Profile addr={`0xeC006735e83BcC039657D6a1De16f6AC1d78B9BF`} />
                 </Link>
 
                 <Link target={`_blank`} href={`#`} className={`flex flex-row align-items-center gap-025  ${styles.ad__link} `}>
@@ -267,6 +191,84 @@ export default function Page() {
 const AdSlider = ({ ads }) => {
   const [activeAd, setActiveAd] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const { web3, contract } = initContract()
+
+  
+  const claimFee = async (e, adId) => {
+    const t = toast.loading(`Waiting for transaction's confirmation`)
+
+    try {
+      // window.lukso
+      //   .request({ method: 'eth_requestAccounts' })
+      //   .then((accounts) => {
+      const account = auth.accounts[0]
+
+      fetchGrid(account)
+        .then(async (res) => {
+          console.log(res)
+          if (!res) {
+            toast.error(`Your wallet address is not eligible`)
+            toast.dismiss(t)
+            e.target.innerText = `Claim`
+            return
+          }
+
+          const resres = res.LSP28TheGrid[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`https://universalads.vercel.app/ad`) > -1)
+          console.log(resres)
+          if (resres < 1) {
+            toast.error(`Your wallet address is not eligible`)
+            toast.dismiss(t)
+            e.target.innerText = `Claim`
+            return
+          }
+
+          const web3 = new Web3(auth.provider)
+
+          // Create a Contract instance
+          const contract = new web3.eth.Contract(ABI, process.env.NEXT_PUBLIC_CONTRACT)
+          contract.methods
+            .claimFee(adId)
+            .send({
+              from: account,
+            })
+            .then((res) => {
+              console.log(res) //res.events.tokenId
+
+              // Run partyjs
+              // party.confetti(document.querySelector(`.__container`), {
+              //   count: party.variation.range(20, 40),
+              //   shapes: ['coin'],
+              // })
+
+              toast.success(`Done`)
+
+              e.target.innerText = `Claim`
+              toast.dismiss(t)
+            })
+            .catch((error) => {
+              e.target.innerText = `Claim`
+              toast.dismiss(t)
+            })
+          // })
+        })
+        .catch((error) => {
+          e.target.innerText = `Claim`
+          // Handle error
+          console.log(error, error.code)
+          toast.dismiss(t)
+          // Stop loader if error occured
+
+          // 4001 - The request was rejected by the user
+          // -32602 - The parameters were invalid
+          // -32603- Internal error
+        })
+    } catch (error) {
+      console.log(error)
+      toast.dismiss(t)
+      e.target.innerText = `Claim fee`
+    }
+  }
+
 
   useEffect(() => {
     let intervalId
@@ -330,96 +332,12 @@ const AdSlider = ({ ads }) => {
         {ads.map((item, i) => {
           return (
             <li key={i} onClick={() => setActiveAd(i)}>
-              <span style={{ width: activeAd === i ? `40px` : null }} data-active={ activeAd === i ? true : null}/>
+              <span style={{ width: activeAd === i ? `40px` : null }} data-active={activeAd === i ? true : null} />
             </li>
           )
         })}
       </ul>
     </>
-  )
-}
-
-/**
- * CreateAd
- * @param {Integer} price
- * @returns
- */
-const CreateAD = ({ price }) => {
-  const [status, setStatus] = useState('')
-
-  const createAD = async (e) => {
-    e.preventDefault()
-    //setIsLoading(true)
-    const t = toast.loading(`Waiting for transaction's confirmation`)
-    const formData = new FormData(e.target)
-    // let startDate = document.querySelector(`[name="startDate"]`).valueAsNumber
-    // startDate = startDate.toString().slice(0, startDate.toString().length - 3)
-
-    //ToDO: upload on ipfs
-    const title = formData.get('title')
-    const link = formData.get('link')
-    const image = formData.get('image')
-    const duration = formData.get('duration')
-    // const upload = await pinata.upload.json({
-    //   name: title,
-    //   link: link,
-    //   image: image,
-    // })
-    // const metadata = `${upload.IpfsHash}`
-
-    const web3 = new Web3(window.lukso)
-
-    // Create a Contract instance
-    const contract = new web3.eth.Contract(ABI, process.env.NEXT_PUBLIC_CONTRACT)
-
-    // console.log(metadata, duration, _.toWei(duration, `ether`))
-    try {
-      window.lukso.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-        contract.methods
-          .newAd('', title, image, link, duration)
-          .send({
-            from: accounts[0],
-            value: web3.utils.toWei(price * duration, `ether`),
-          })
-          .then((res) => {
-            console.log(res) //res.events.tokenId
-            toast.dismiss(t)
-            setIsLoading(true)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  return (
-    <div className={`${styles.form}`}>
-      <form onSubmit={(e) => createAD(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
-        <div>
-          <input type="text" name="title" placeholder="Title" />
-        </div>
-
-        <div>
-          <input type="text" name="link" placeholder="Link" required />
-        </div>
-
-        <div>
-          <input type="text" name="image" placeholder="Image URL" required />
-        </div>
-
-        <div>
-          <label htmlFor="">Days: </label>
-          <input type="number" name="duration" id="" defaultValue={1} />
-          <small>Price per day: {!price ? `Reading...` : price} LYX</small>
-        </div>
-        <button className="mt-20 btn" type="submit">
-          {status === `loading` ? 'Please wait...' : 'Create new AD'}
-        </button>
-      </form>
-    </div>
   )
 }
 
@@ -441,7 +359,7 @@ const Profile = ({ addr, createdAt }) => {
     })
   }, [addr])
 
-  if (!data) return <div className={`shimmer ${styles.shimmer}`} />
+  if (!data || data.data) return <div className={`shimmer ${styles.shimmer}`} />
   return (
     <figure className={`${styles.profile} rounded flex flex-row align-items-center justify-content-start gap-050`}>
       <div className={` ${styles.profileImageWrapper}`}>
