@@ -356,7 +356,7 @@ const Claim = ({ ad, userAddress }) => {
     })
   }, [ad, userAddress])
 
-  if (hasClaimed) return <></>
+  if (hasClaimed) return <> </>
   return <button onClick={(e) => claimFee(e, ad.adIndex)}>Claim</button>
 }
 
