@@ -249,6 +249,14 @@ contract UniversalADs is Ownable(msg.sender), Pausable {
         }
         return adsArray;
     }
+    
+    /// @notice Checks if a user has already claimed a specific ad.
+    /// @param _adIndex The index of the ad to check.
+    /// @param _userAddress The address of the user.
+    /// @return A boolean indicating if the user has claimed the ad.
+    function hasUserClaimedAd(uint256 _adIndex, address _userAddress) public view returns (bool) {
+        return ads[_adIndex].claimed[_userAddress];
+    }
 
     // --- Utility Functions ---
 

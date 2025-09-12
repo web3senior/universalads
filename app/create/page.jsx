@@ -9,6 +9,7 @@ import ABI from '@/abi/universalads.json'
 import { useUpProvider } from '@/contexts/UpProvider'
 import { PinataSDK } from 'pinata'
 import styles from './page.module.scss'
+import toast from 'react-hot-toast'
 
 moment.defineLocale('en-short', {
   relativeTime: {
@@ -53,7 +54,7 @@ export default function Page() {
   const createAD = async (e) => {
     e.preventDefault()
     //setIsLoading(true)
-    //const t = toast.loading(`Waiting for transaction's confirmation`)
+    const t = toast.loading(`Waiting for transaction's confirmation`)
     const formData = new FormData(e.target)
     // let startDate = document.querySelector(`[name="startDate"]`).valueAsNumber
     // startDate = startDate.toString().slice(0, startDate.toString().length - 3)
@@ -86,7 +87,8 @@ export default function Page() {
         })
         .then((res) => {
           console.log(res) //res.events.tokenId
-
+          toast.dismiss(t)
+          toast.success(`Done`)
           //    setIsLoading(true)
         })
         .catch((error) => {

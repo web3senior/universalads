@@ -510,6 +510,30 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "_adIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_userAddress",
+						"type": "address"
+					}
+				],
+				"name": "hasUserClaimedAd",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "string",
 						"name": "_metadata",
 						"type": "string"
@@ -848,6 +872,15 @@
 						"_0": "The length of the `ads` array."
 					}
 				},
+				"hasUserClaimedAd(uint256,address)": {
+					"params": {
+						"_adIndex": "The index of the ad to check.",
+						"_userAddress": "The address of the user."
+					},
+					"returns": {
+						"_0": "A boolean indicating if the user has claimed the ad."
+					}
+				},
 				"newAd(string,string,string,string,uint256)": {
 					"details": "The function first checks for an expired ad slot to overwrite to optimize space. If no expired slots are found and the ad array is full, the transaction will revert. It ensures the caller has sent enough LUKSO to cover the cost, and then transfers the fees to the owner and team.",
 					"params": {
@@ -1037,6 +1070,9 @@
 				"hasSpace()": {
 					"notice": "Returns the total number of empty ads."
 				},
+				"hasUserClaimedAd(uint256,address)": {
+					"notice": "Checks if a user has already claimed a specific ad."
+				},
 				"newAd(string,string,string,string,uint256)": {
 					"notice": "Creates a new ad with specified metadata and duration."
 				},
@@ -1169,11 +1205,11 @@
 			]
 		},
 		"UniversalADs.sol": {
-			"keccak256": "0xe663f40b60644333f7d7555b23060f6411310bf988551da74e2b47c07999f9f6",
+			"keccak256": "0x7dd0eea2d21da8e91dfb6616647d627544b8c2b5ea1b4361dccb526d24ee4007",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a35bcb2089cde82a92e5da1dd9009eec430242bec15e0be07a35c5d023224318",
-				"dweb:/ipfs/QmPq4eDsaXFrbcnRVoUyVc9t6YvyuJve2X35CkoTLxGeki"
+				"bzz-raw://741986a6b7014ef02f2db560106417c2f5d662d19ac85700eb6ff25539c276b5",
+				"dweb:/ipfs/QmRfHpBB4UVDes211nzngR1jTbyQ9M1qTr2qtgRfns3ebf"
 			]
 		}
 	},

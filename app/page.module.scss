@@ -116,15 +116,6 @@
   border: 3px solid var(--color-primary);
   overflow: hidden;
 
-  button {
-    position: absolute;
-    right: 2em;
-    top: 1em;
-    z-index: 999;
-    padding: 0.2rem 0.5rem;
-    border-radius: 1000px;
-  }
-
   &__pfp {
     position: absolute;
     left: 2em;
@@ -135,6 +126,23 @@
   &__link {
     width: 100%;
     height: 180px;
+  }
+
+  &__updateLink {
+    position: absolute;
+    right: 2em;
+    top: 1em;
+    z-index: 999;
+    button,
+    a {
+      padding: 0.2rem 1rem;
+      background-color: var(--gray-900);
+      color: #fff;
+      border-radius: 999px;
+      z-index: 2;
+      padding: 0.2rem 0.5rem;
+      border-radius: 1000px;
+    }
   }
 
   &__image {

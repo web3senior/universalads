@@ -7,7 +7,7 @@ import arattalabs from '@/public/arattalabs.svg'
 import upIcon from '@/public/icons/up.png'
 import logo from '@/public/logo.svg'
 import { toast } from 'react-hot-toast'
-import { initContract, getPrice, getADs, getAdLength, hasSpace } from '@/util/communication'
+import { initContract, getPrice, getADs, getAdLength, hasSpace, getHasUserClaimedAd } from '@/util/communication'
 import { getProfile } from '@/util/api'
 import Web3 from 'web3'
 import ABI from '@/abi/universalads.json'
@@ -53,45 +53,6 @@ export default function Page() {
   const giftModalMessage = useRef()
   const auth = useUpProvider()
 
-  const fetchGrid = async (addr) => {
-    //console.log(addr)
-    var contract = new web3.eth.Contract(LSP0ERC725Account.abi, addr)
-    try {
-      return contract.methods
-        .getData('0x724141d9918ce69e6b8afcf53a91748466086ba2c74b94cab43c649ae2ac23ff')
-        .call()
-        .then(async (data) => {
-          console.log(data)
-          if (data === `0x`) return false
-          data = data.substring(6, data.length)
-          // console.log(data)
-          //  data ="0x" + data.substring(6)
-          //  console.log(data)
-          // slice the bytes to get its pieces
-          const hashFunction = '0x' + data.slice(0, 8)
-          // console.log(hashFunction)
-          const hash = '0x' + data.slice(76)
-          const url = '0x' + data.slice(76)
-
-          // console.log(hashFunction, ' | ', hash, ' | ', url)
-
-          // check if it uses keccak256
-          //  if (hashFunction === '0x6f357c6a') {
-          // download the json file
-          const json = await getIPFS(web3.utils.hexToUtf8(url).replace('ipfs://', '').replace('://', ''))
-          return json
-          // compare hashes
-          if (web3.utils.keccak256(JSON.stringify(json)) === hash.replace(hashFunction, '')) {
-            return json
-          } else false
-          // }
-        })
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  }
-
   const toDate = (unix_timestamp) => {
     var date = new Date(unix_timestamp * 1000)
 
@@ -107,17 +68,6 @@ export default function Page() {
     // Will display time in 10:30:23 format
     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
     return new Date(date).toString()
-  }
-
-  const getIPFS = async (CID) => {
-    //  console.log(CID)
-    let requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-    }
-    const response = await fetch(`https://api.universalprofile.cloud/ipfs/${CID}`, requestOptions)
-    if (!response.ok) throw new Response('Failed to get data', { status: 500 })
-    return response.json()
   }
 
   useEffect(() => {
@@ -192,8 +142,140 @@ const AdSlider = ({ ads }) => {
   const [activeAd, setActiveAd] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const { web3, contract } = initContract()
+  const auth = useUpProvider()
 
-  
+  useEffect(() => {
+    let intervalId
+
+    if (!isPaused) {
+      // Only start interval if not paused
+      intervalId = setInterval(() => {
+        setActiveAd((prevActiveAd) => {
+          if (prevActiveAd === ads.length - 1) {
+            return 0
+          }
+          return prevActiveAd + 1
+        })
+      }, 9000)
+    }
+
+    // Cleanup function
+    return () => clearInterval(intervalId)
+  }, [ads.length, isPaused])
+
+  return (
+    <>
+      <div
+        className={`${styles.ad} animate fade`}
+        onMouseEnter={() => setIsPaused(true)} // Pause on mouse over
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        <section data-name={ads[activeAd].title} className={`${styles.ad__item} flex flex-column align-items-start justify-content-between gap-1`}>
+          <Link target={`_blank`} href={``} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
+            <Profile addr={ads[activeAd].creator} />
+          </Link>
+
+          <div className={` flex gap-050 ${styles.ad__updateLink}`}>
+            {auth.walletConnected && <Claim userAddress={auth.accounts[0]} ad={ads[activeAd]} />}
+
+            <Link target={`_blank`} href={`update`} className={`flex flex-row align-items-center gap-025 `}>
+              Update
+            </Link>
+          </div>
+
+          <Link target={`_blank`} href={`${ads[activeAd].link}`} className={`flex flex-row align-items-center gap-025  ${styles.ad__link} `}>
+            <div className={`${styles.ad__image}`} data-title={`${ads[activeAd].title}`} style={{ '--src': `url("${ads[activeAd].image}")` }} />
+          </Link>
+
+          <Link target={`_blank`} href={`https://profile.link/universalads@eC00`} className={`flex flex-row align-items-center gap-025  ${styles.copyright} `}>
+            <img alt={`UniversalADs`} src={logo.src} />
+          </Link>
+        </section>
+      </div>
+
+      <ul className={`${styles.dots} rounded flex align-items-center justify-content-center gap-025`}>
+        {isPaused ? (
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M3.05263 5.70042L5.70042 4L3.05263 2.29958V5.70042ZM4.00074 8C3.44747 8 2.92744 7.89502 2.44063 7.68505C1.95382 7.47509 1.53039 7.19014 1.17032 6.83021C0.810246 6.47028 0.525158 6.04702 0.315053 5.56042C0.105017 5.07382 0 4.55393 0 4.00074C0 3.44747 0.104982 2.92744 0.314947 2.44063C0.524912 1.95382 0.80986 1.53039 1.16979 1.17032C1.52972 0.810246 1.95298 0.525158 2.43958 0.315053C2.92618 0.105017 3.44607 0 3.99926 0C4.55253 0 5.07256 0.104982 5.55937 0.314947C6.04618 0.524912 6.46961 0.80986 6.82968 1.16979C7.18975 1.52972 7.47484 1.95298 7.68495 2.43958C7.89498 2.92618 8 3.44607 8 3.99926C8 4.55253 7.89502 5.07256 7.68505 5.55937C7.47509 6.04618 7.19014 6.46961 6.83021 6.82968C6.47028 7.18975 6.04702 7.47484 5.56042 7.68495C5.07382 7.89498 4.55393 8 4.00074 8Z"
+              fill="white"
+            />
+          </svg>
+        ) : (
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M2.90695 5.57895H3.53842V2.42105H2.90695V5.57895ZM4.46158 5.57895H5.09305V2.42105H4.46158V5.57895ZM4.00074 8C3.44747 8 2.92744 7.89502 2.44063 7.68505C1.95382 7.47509 1.53039 7.19014 1.17032 6.83021C0.810246 6.47028 0.525158 6.04702 0.315053 5.56042C0.105017 5.07382 0 4.55393 0 4.00074C0 3.44747 0.104982 2.92744 0.314947 2.44063C0.524912 1.95382 0.80986 1.53039 1.16979 1.17032C1.52972 0.810246 1.95298 0.525158 2.43958 0.315053C2.92618 0.105017 3.44607 0 3.99926 0C4.55253 0 5.07256 0.104982 5.55937 0.314947C6.04618 0.524912 6.46961 0.80986 6.82968 1.16979C7.18975 1.52972 7.47484 1.95298 7.68495 2.43958C7.89498 2.92618 8 3.44607 8 3.99926C8 4.55253 7.89502 5.07256 7.68505 5.55937C7.47509 6.04618 7.19014 6.46961 6.83021 6.82968C6.47028 7.18975 6.04702 7.47484 5.56042 7.68495C5.07382 7.89498 4.55393 8 4.00074 8Z"
+              fill="white"
+            />
+          </svg>
+        )}
+        {ads.map((item, i) => {
+          return (
+            <li key={i} onClick={() => setActiveAd(i)}>
+              <span style={{ width: activeAd === i ? `40px` : null }} data-active={activeAd === i ? true : null} />
+            </li>
+          )
+        })}
+      </ul>
+    </>
+  )
+}
+
+const Claim = ({ ad, userAddress }) => {
+  const [hasClaimed, setHasClaimed] = useState(true)
+  const { web3, contract } = initContract()
+  const auth = useUpProvider()
+
+  const fetchGrid = async (addr) => {
+    //console.log(addr)
+    var contract = new web3.eth.Contract(LSP0ERC725Account.abi, addr)
+    try {
+      return contract.methods
+        .getData('0x724141d9918ce69e6b8afcf53a91748466086ba2c74b94cab43c649ae2ac23ff')
+        .call()
+        .then(async (data) => {
+          console.log(data)
+          if (data === `0x`) return false
+          data = data.substring(6, data.length)
+          // console.log(data)
+          //  data ="0x" + data.substring(6)
+          //  console.log(data)
+          // slice the bytes to get its pieces
+          const hashFunction = '0x' + data.slice(0, 8)
+          // console.log(hashFunction)
+          const hash = '0x' + data.slice(76)
+          const url = '0x' + data.slice(76)
+
+          // console.log(hashFunction, ' | ', hash, ' | ', url)
+
+          // check if it uses keccak256
+          //  if (hashFunction === '0x6f357c6a') {
+          // download the json file
+          const json = await getIPFS(web3.utils.hexToUtf8(url).replace('ipfs://', '').replace('://', ''))
+          return json
+          // compare hashes
+          if (web3.utils.keccak256(JSON.stringify(json)) === hash.replace(hashFunction, '')) {
+            return json
+          } else false
+          // }
+        })
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  }
+
+  const getIPFS = async (CID) => {
+    //  console.log(CID)
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    }
+    const response = await fetch(`https://api.universalprofile.cloud/ipfs/${CID}`, requestOptions)
+    if (!response.ok) throw new Response('Failed to get data', { status: 500 })
+    return response.json()
+  }
+
   const claimFee = async (e, adId) => {
     const t = toast.loading(`Waiting for transaction's confirmation`)
 
@@ -207,7 +289,7 @@ const AdSlider = ({ ads }) => {
         .then(async (res) => {
           console.log(res)
           if (!res) {
-            toast.error(`Your wallet address is not eligible`)
+            toast.error(`Your wallet address is not eligible, clone UniversalADs to your grid first.`)
             toast.dismiss(t)
             e.target.innerText = `Claim`
             return
@@ -216,7 +298,7 @@ const AdSlider = ({ ads }) => {
           const resres = res.LSP28TheGrid[0].grid.filter((item, id) => item.type === `IFRAME` && item.properties.src.search(`https://universalads.vercel.app/ad`) > -1)
           console.log(resres)
           if (resres < 1) {
-            toast.error(`Your wallet address is not eligible`)
+            toast.error(`Your wallet address is not eligible, clone UniversalADs to your grid first.`)
             toast.dismiss(t)
             e.target.innerText = `Claim`
             return
@@ -268,80 +350,14 @@ const AdSlider = ({ ads }) => {
       e.target.innerText = `Claim fee`
     }
   }
-
-
   useEffect(() => {
-    let intervalId
+    getHasUserClaimedAd(ad.adIndex, userAddress).then((res) => {
+      setHasClaimed(res)
+    })
+  }, [ad, userAddress])
 
-    if (!isPaused) {
-      // Only start interval if not paused
-      intervalId = setInterval(() => {
-        setActiveAd((prevActiveAd) => {
-          if (prevActiveAd === ads.length - 1) {
-            return 0
-          }
-          return prevActiveAd + 1
-        })
-      }, 9000)
-    }
-
-    // Cleanup function
-    return () => clearInterval(intervalId)
-  }, [ads.length, isPaused])
-
-  return (
-    <>
-      <div
-        className={`${styles.ad} animate fade`}
-        onMouseEnter={() => setIsPaused(true)} // Pause on mouse over
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <section data-name={ads[activeAd].title} className={`${styles.ad__item} flex flex-column align-items-start justify-content-between gap-1`}>
-          <Link target={`_blank`} href={``} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
-            <Profile addr={ads[activeAd].creator} />
-          </Link>
-
-          {<button onClick={(e) => claimFee(e, web3.utils.toNumber(ads[activeAd].adIndex))}>Claim</button>}
-
-     <Link target={`_blank`} href={`update`} className={`flex flex-row align-items-center gap-025  ${styles.ad__link} `}>
-            Update
-          </Link>
-          <Link target={`_blank`} href={`${ads[activeAd].link}`} className={`flex flex-row align-items-center gap-025  ${styles.ad__link} `}>
-            <div className={`${styles.ad__image}`} data-title={`${ads[activeAd].title}`} style={{ '--src': `url("${ads[activeAd].image}")` }} />
-          </Link>
-
-          <Link target={`_blank`} href={`https://profile.link/universalads@eC00`} className={`flex flex-row align-items-center gap-025  ${styles.copyright} `}>
-            <img alt={`UniversalADs`} src={logo.src} />
-          </Link>
-        </section>
-      </div>
-
-      <ul className={`${styles.dots} rounded flex align-items-center justify-content-center gap-025`}>
-        {isPaused ? (
-          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M3.05263 5.70042L5.70042 4L3.05263 2.29958V5.70042ZM4.00074 8C3.44747 8 2.92744 7.89502 2.44063 7.68505C1.95382 7.47509 1.53039 7.19014 1.17032 6.83021C0.810246 6.47028 0.525158 6.04702 0.315053 5.56042C0.105017 5.07382 0 4.55393 0 4.00074C0 3.44747 0.104982 2.92744 0.314947 2.44063C0.524912 1.95382 0.80986 1.53039 1.16979 1.17032C1.52972 0.810246 1.95298 0.525158 2.43958 0.315053C2.92618 0.105017 3.44607 0 3.99926 0C4.55253 0 5.07256 0.104982 5.55937 0.314947C6.04618 0.524912 6.46961 0.80986 6.82968 1.16979C7.18975 1.52972 7.47484 1.95298 7.68495 2.43958C7.89498 2.92618 8 3.44607 8 3.99926C8 4.55253 7.89502 5.07256 7.68505 5.55937C7.47509 6.04618 7.19014 6.46961 6.83021 6.82968C6.47028 7.18975 6.04702 7.47484 5.56042 7.68495C5.07382 7.89498 4.55393 8 4.00074 8Z"
-              fill="white"
-            />
-          </svg>
-        ) : (
-          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M2.90695 5.57895H3.53842V2.42105H2.90695V5.57895ZM4.46158 5.57895H5.09305V2.42105H4.46158V5.57895ZM4.00074 8C3.44747 8 2.92744 7.89502 2.44063 7.68505C1.95382 7.47509 1.53039 7.19014 1.17032 6.83021C0.810246 6.47028 0.525158 6.04702 0.315053 5.56042C0.105017 5.07382 0 4.55393 0 4.00074C0 3.44747 0.104982 2.92744 0.314947 2.44063C0.524912 1.95382 0.80986 1.53039 1.16979 1.17032C1.52972 0.810246 1.95298 0.525158 2.43958 0.315053C2.92618 0.105017 3.44607 0 3.99926 0C4.55253 0 5.07256 0.104982 5.55937 0.314947C6.04618 0.524912 6.46961 0.80986 6.82968 1.16979C7.18975 1.52972 7.47484 1.95298 7.68495 2.43958C7.89498 2.92618 8 3.44607 8 3.99926C8 4.55253 7.89502 5.07256 7.68505 5.55937C7.47509 6.04618 7.19014 6.46961 6.83021 6.82968C6.47028 7.18975 6.04702 7.47484 5.56042 7.68495C5.07382 7.89498 4.55393 8 4.00074 8Z"
-              fill="white"
-            />
-          </svg>
-        )}
-        {ads.map((item, i) => {
-          return (
-            <li key={i} onClick={() => setActiveAd(i)}>
-              <span style={{ width: activeAd === i ? `40px` : null }} data-active={activeAd === i ? true : null} />
-            </li>
-          )
-        })}
-      </ul>
-    </>
-  )
+  if (hasClaimed) return <></>
+  return <button onClick={(e) => claimFee(e, ad.adIndex)}>Claim</button>
 }
 
 /**

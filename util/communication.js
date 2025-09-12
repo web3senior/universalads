@@ -63,6 +63,18 @@ export async function getAdLength() {
   }
 }
 
+export async function getHasUserClaimedAd(adIndex, userAddress) {
+  const { web3, contract } = initContract()
+
+  try {
+    const result = await contract.methods.hasUserClaimedAd(adIndex, userAddress).call()
+    return result
+  } catch (error) {
+    console.error('Error fetching contract data with Web3.js:', error)
+    return { error }
+  }
+}
+
 export async function getVoteCountsForPoll(pollId) {
   const { web3, contract } = initContract()
 
