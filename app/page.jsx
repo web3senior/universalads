@@ -127,7 +127,7 @@ export default function Page() {
 
       <Link href={`/create`} className={`${styles.btnCreate} rounded`}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11.25 12.75H5.5V11.25H11.25V5.5H12.75V11.25H18.5V12.75H12.75V18.5H11.25V12.75Z" fill="#424242" />
+          <path d="M11.25 12.75H5.5V11.25H11.25V5.5H12.75V11.25H18.5V12.75H12.75V18.5H11.25V12.75Z" fill="#fff" />
         </svg>
       </Link>
 
@@ -366,7 +366,6 @@ const Claim = ({ ad, userAddress }) => {
  * @returns
  */
 const Profile = ({ addr, createdAt }) => {
-  console.log(addr)
   const [data, setData] = useState()
   const { web3, contract } = initContract()
   const auth = useUpProvider()
@@ -378,7 +377,7 @@ const Profile = ({ addr, createdAt }) => {
     })
   }, [addr])
 
-  if (!data) return <div className={`shimmer ${styles.shimmer}`} />
+  if (!data || data.data.search_profiles.length < 1) return <div className={`shimmer ${styles.shimmer}`} />
   return (
     <figure className={`${styles.profile} rounded flex flex-row align-items-center justify-content-start gap-050`}>
       <div className={` ${styles.profileImageWrapper}`}>
