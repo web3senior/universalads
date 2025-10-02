@@ -124,9 +124,6 @@ export default function Page() {
   return (
     <div className={`${styles.page} ms-motion-slideDownIn`}>
       <div className={`__container ${styles.page__container}`} data-width={`medium`}>
-        <Link href={`/`} className={`d-f-c`}>
-          Back
-        </Link>
         <div className={`grid grid--fit grid--gap-1`} style={{ '--data-width': `80px` }}>
           <div className={`card border`}>
             <div className={`card__body`}>
