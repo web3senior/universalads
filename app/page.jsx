@@ -3,9 +3,7 @@
 import { useState, useEffect, useId, useRef } from 'react'
 import Link from 'next/link'
 import moment from 'moment'
-import arattalabs from '@/public/arattalabs.svg'
 import upIcon from '@/public/icons/up.png'
-import logo from '@/public/logo.svg'
 import { toast } from 'react-hot-toast'
 import { initContract, getPrice, getADs, getAdLength, hasSpace, getHasUserClaimedAd } from '@/util/communication'
 import { getProfile } from '@/util/api'
@@ -104,36 +102,40 @@ export default function Page() {
           <div className={`${styles.ad} animate fade`}>
             <div className={`relative`}>
               <section data-name={``} className={`${styles.ad__item} flex flex-column align-items-start justify-content-between gap-1`}>
-                <Link target={`_blank`} href={``} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
+                {/* <Link target={`_blank`} href={``} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
                   <Profile addr={`0xeC006735e83BcC039657D6a1De16f6AC1d78B9BF`} />
-                </Link>
+                </Link> */}
 
                 <Link target={`_blank`} href={`#`} className={`flex flex-row align-items-center gap-025  ${styles.ad__link} `}>
                   <div className={`${styles.ad__image} d-f-c`} data-title={``} style={{ '--src': `url("")` }}>
                     Your AD here
                   </div>
                 </Link>
-
-                <Link target={`_blank`} href={`https://profile.link/universalads@eC00`} className={`flex flex-row align-items-center gap-025  ${styles.copyright} `}>
-                  <img alt={`UniversalADs`} src={logo.src} />
-                </Link>
               </section>
             </div>
           </div>
         )}
-
+      <Link target={`_blank`} href={`https://profile.link/universalads@eC00`} className={`flex flex-row align-items-center gap-025  ${styles.copyright} `}>
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="6.5" cy="6.5" r="6.5" fill="#778DA9" />
+          <path
+            d="M6.33613 6.71683L6.33141 6.22229C6.33141 4.45183 7.40119 4 8.57932 4C9.78577 4 10.8252 4.47094 10.8252 6.20026V9.01015C10.8235 9.07498 10.7964 9.13655 10.7497 9.18158C10.703 9.22662 10.6405 9.25151 10.5757 9.2509H9.91907C9.85368 9.2518 9.7906 9.22676 9.74363 9.18126C9.69665 9.13576 9.66962 9.07351 9.66843 9.00812V6.16609C9.66843 5.17251 9.14107 4.87803 8.56471 4.87803C7.90337 4.87803 7.48818 5.22624 7.48818 6.16609V6.7166"
+            fill="white"
+          />
+          <path
+            d="M9.19637 6.54643H8.00138C7.88629 6.54643 7.793 6.63973 7.793 6.75481V7.01445C7.793 7.12953 7.88629 7.22283 8.00138 7.22283H9.19637C9.31146 7.22283 9.40475 7.12953 9.40475 7.01445V6.75481C9.40475 6.63973 9.31146 6.54643 9.19637 6.54643Z"
+            fill="white"
+          />
+          <path
+            d="M6.33613 6.71683L6.33141 6.22229C6.33141 4.45183 7.40119 4 8.57932 4C9.78577 4 10.8252 4.47094 10.8252 6.20026V9.01015C10.8235 9.07498 10.7964 9.13655 10.7497 9.18158C10.703 9.22662 10.6405 9.25151 10.5757 9.2509H9.91907C9.85368 9.2518 9.7906 9.22676 9.74363 9.18126C9.69665 9.13576 9.66962 9.07351 9.66843 9.00812V6.16609C9.66843 5.17251 9.14107 4.87803 8.56471 4.87803C7.90337 4.87803 7.48818 5.22624 7.48818 6.16609V6.7166L7.49358 7.02996C7.49358 8.80064 6.4238 9.2518 5.24567 9.2518C4.03944 9.2518 3 8.77974 3 7.05132V4.243C3.00124 4.17769 3.02827 4.11553 3.07519 4.07009C3.12211 4.02464 3.1851 3.99961 3.25042 4.00045H3.90658C3.97194 3.99961 4.03496 4.02467 4.08189 4.07017C4.12881 4.11566 4.15582 4.17788 4.157 4.24323V7.08616C4.157 8.07974 4.68436 8.37422 5.26073 8.37422C5.92206 8.37422 6.33725 8.02601 6.33725 7.08616L6.33613 6.71683Z"
+            fill="white"
+          />
+        </svg>
+      </Link>
         {adSpace !== 9 && ads.length > 0 && <AdSlider ads={ads} />}
       </div>
 
-      <Link href={`/create`} className={`${styles.btnCreate} rounded animate flip`}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11.25 12.75H5.5V11.25H11.25V5.5H12.75V11.25H18.5V12.75H12.75V18.5H11.25V12.75Z" fill="#fff" />
-        </svg>
-      </Link>
 
-      <Link target={`_blank`} href={`//aratta.dev`} className={`${styles.link} `}>
-        <img alt={`ArattaLabs`} src={arattalabs.src} />
-      </Link>
     </div>
   )
 }
@@ -171,9 +173,9 @@ const AdSlider = ({ ads }) => {
         onMouseLeave={() => setIsPaused(false)}
       >
         <section data-name={ads[activeAd].title} className={`${styles.ad__item} flex flex-column align-items-start justify-content-between gap-1`}>
-          <Link target={`_blank`} href={`https://universaleverything.io/${ads[activeAd].creator}?network=mainnet`} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
+          {/* <Link target={`_blank`} href={`https://universaleverything.io/${ads[activeAd].creator}?network=mainnet`} className={`flex flex-row align-items-center gap-025  ${styles.ad__pfp} `}>
             <Profile addr={ads[activeAd].creator} />
-          </Link>
+          </Link> */}
 
           <div className={` flex gap-050 ${styles.ad__updateLink}`}>
             {auth.walletConnected && <Claim userAddress={auth.accounts[0]} ad={ads[activeAd]} />}
@@ -187,9 +189,7 @@ const AdSlider = ({ ads }) => {
             <div className={`${styles.ad__image}`} data-title={`${ads[activeAd].title}`} style={{ '--src': `url("${ads[activeAd].image}")` }} />
           </Link>
 
-          <Link target={`_blank`} href={`https://profile.link/universalads@eC00`} className={`flex flex-row align-items-center gap-025  ${styles.copyright} `}>
-            <img alt={`UniversalADs`} src={logo.src} />
-          </Link>
+          <Link target={`_blank`} href={`https://profile.link/universalads@eC00`} className={`flex flex-row align-items-center gap-025  ${styles.copyright} `}></Link>
         </section>
       </div>
 
@@ -360,35 +360,35 @@ const Claim = ({ ad, userAddress }) => {
   return <button onClick={(e) => claimFee(e, ad.adIndex)}>Claim</button>
 }
 
-/**
- * Profile
- * @param {String} addr
- * @returns
- */
-const Profile = ({ addr, createdAt }) => {
-  const [data, setData] = useState()
-  const { web3, contract } = initContract()
-  const auth = useUpProvider()
+// /**
+//  * Profile
+//  * @param {String} addr
+//  * @returns
+//  */
+// const Profile = ({ addr, createdAt }) => {
+//   const [data, setData] = useState()
+//   const { web3, contract } = initContract()
+//   const auth = useUpProvider()
 
-  useEffect(() => {
-    getProfile(addr).then((data) => {
-      console.log(data)
-      setData(data)
-    })
-  }, [addr])
+//   useEffect(() => {
+//     getProfile(addr).then((data) => {
+//       console.log(data)
+//       setData(data)
+//     })
+//   }, [addr])
 
-  if (!data || data.data.search_profiles.length < 1) return <div className={`shimmer ${styles.shimmer}`} />
-  return (
-    <figure className={`${styles.profile} rounded flex flex-row align-items-center justify-content-start gap-050`}>
-      <div className={` ${styles.profileImageWrapper}`}>
-        <img
-          alt={data.data.search_profiles[0].name || `Default PFP`}
-          title={data.data.search_profiles[0].name}
-          src={`${data.data.search_profiles[0].profileImages.length > 0 ? data.data.search_profiles[0].profileImages[0].src : 'https://ipfs.io/ipfs/bafkreiatl2iuudjiq354ic567bxd7jzhrixf5fh5e6x6uhdvl7xfrwxwzm'}`}
-          className={`${styles.pfp} rounded`}
-        />
-        <img alt={`blue checkmark icon`} src={upIcon.src} />
-      </div>
-    </figure>
-  )
-}
+//   if (!data || data.data.search_profiles.length < 1) return <div className={`shimmer ${styles.shimmer}`} />
+//   return (
+//     <figure className={`${styles.profile} rounded flex flex-row align-items-center justify-content-start gap-050`}>
+//       <div className={` ${styles.profileImageWrapper}`}>
+//         <img
+//           alt={data.data.search_profiles[0].name || `Default PFP`}
+//           title={data.data.search_profiles[0].name}
+//           src={`${data.data.search_profiles[0].profileImages.length > 0 ? data.data.search_profiles[0].profileImages[0].src : 'https://ipfs.io/ipfs/bafkreiatl2iuudjiq354ic567bxd7jzhrixf5fh5e6x6uhdvl7xfrwxwzm'}`}
+//           className={`${styles.pfp} rounded`}
+//         />
+//         <img alt={`blue checkmark icon`} src={upIcon.src} />
+//       </div>
+//     </figure>
+//   )
+// }

@@ -12,7 +12,6 @@
   &__container {
     background-color: var(--white, #fff);
     filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.04));
-    border-radius: var(--global-border-radius);
     overflow: hidden;
 
     &:hover {
@@ -32,7 +31,7 @@
     ul.dots {
       background-color: var(--black);
       padding: 0.2rem 0.2rem;
-      position: absolute;
+      position: fixed;
       left: 50%;
       bottom: 0.5rem;
       transform: translate(-50%);
@@ -87,41 +86,9 @@
   background-color: var(--white, #fff);
 }
 
-.btnCreate {
-  padding: 0.2rem 0.5rem;
-  background-color: var(--gray-900);
-  color: var(--white, #fff);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  gap: 10px;
-
-  position: fixed;
-  width: 48px;
-  height: 48px;
-  right: 0.5rem;
-  bottom: 0.5rem;
-
-  background: var(--color-primary);
-  box-shadow: var(--shadow-10);
-  border-radius: 363.273px;
-}
-
 .ad {
   position: relative;
   border-radius: inherit;
-  border: 3px solid var(--color-primary);
-  overflow: hidden;
-
-  &__pfp {
-    position: absolute;
-    left: 2em;
-    top: 1em;
-    z-index: 999;
-  }
 
   &__link {
     width: 100%;
@@ -160,11 +127,16 @@
 }
 
 .copyright {
-  position: absolute;
-  left: -4px;
-  bottom: 1em;
-  z-index: 1;
-  cursor: help;
+  position: fixed;
+  right: 0.2rem;
+  bottom: 0.2rem;
+  z-index: 1000;
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .profile {
