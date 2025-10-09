@@ -636,69 +636,69 @@ export default function Page() {
   const getLYXBalance = async () => await web3.eth.getBalance(process.env.NEXT_PUBLIC_CONTRACT)
 
   useEffect(() => {
-    getLYXPrice().then((res) => {
-      console.log(parseFloat(res.Price))
-      setLYX(parseFloat(res.Price))
-    })
+    // getLYXPrice().then((res) => {
+    //   console.log(parseFloat(res.Price))
+    //   setLYX(parseFloat(res.Price))
+    // })
 
-    getFishBalance().then((res) => {
-      console.log(res)
-      setFishBalance(web3.utils.fromWei(res, `ether`))
-    })
+    // getFishBalance().then((res) => {
+    //   console.log(res)
+    //   setFishBalance(web3.utils.fromWei(res, `ether`))
+    // })
 
-    getLYXBalance().then((res) => {
-      console.log(res)
-      const balance = web3.utils.fromWei(res, `ether`)
-      setLYXBalance(balance)
-    })
+    // getLYXBalance().then((res) => {
+    //   console.log(res)
+    //   const balance = web3.utils.fromWei(res, `ether`)
+    //   setLYXBalance(balance)
+    // })
 
-    getMaxSupply().then((res) => {
-      console.log(res)
-      setMaxSupply(res)
-    })
+    // getMaxSupply().then((res) => {
+    //   console.log(res)
+    //   setMaxSupply(res)
+    // })
 
-    getSupplyCap().then((res) => {
-      console.log(res)
-      setSupplyCap(res)
-    })
+    // getSupplyCap().then((res) => {
+    //   console.log(res)
+    //   setSupplyCap(res)
+    // })
 
-    getTokenIdCounter().then((res) => {
-      console.log(res)
-      setTokenIdCounter(res)
-    })
+    // getTokenIdCounter().then((res) => {
+    //   console.log(res)
+    //   setTokenIdCounter(res)
+    // })
 
-    getPPT().then((res) => {
-      console.log(res)
-      setPPT(res)
-    })
+    // getPPT().then((res) => {
+    //   console.log(res)
+    //   setPPT(res)
+    // })
 
-    getVersion().then((res) => {
-      console.log(res)
-      setVersion(res)
-    })
+    // getVersion().then((res) => {
+    //   console.log(res)
+    //   setVersion(res)
+    // })
 
-    getIsInitialized().then(setIsInitialized)
-    getActivePhase().then(setActivePhase)
-    getFISH().then(setFISH)
-    getMEMBER_CARD().then(setMEMBER_CARD)
-    getRICH().then(setRICH)
-    getFISHCAN().then(setFISHCAN)
-    getARATTALABS().then(setARATTALABS)
-    getLUKSEALS().then(setLUKSEALS)
-    getMADSKI().then(setMADSKI)
-    getDACHRIZ().then(setDACHRIZ)
-    getARFI().then(setARFI)
-    getFOLLOWING().then(setFOLLOWING)
+    // getIsInitialized().then(setIsInitialized)
+    // getActivePhase().then(setActivePhase)
+    // getFISH().then(setFISH)
+    // getMEMBER_CARD().then(setMEMBER_CARD)
+    // getRICH().then(setRICH)
+    // getFISHCAN().then(setFISHCAN)
+    // getARATTALABS().then(setARATTALABS)
+    // getLUKSEALS().then(setLUKSEALS)
+    // getMADSKI().then(setMADSKI)
+    // getDACHRIZ().then(setDACHRIZ)
+    // getARFI().then(setARFI)
+    // getFOLLOWING().then(setFOLLOWING)
 
-    getLevelPrice().then((res) => {
-      console.log(res)
-      setLevelPrice(res)
-    })
+    // getLevelPrice().then((res) => {
+    //   console.log(res)
+    //   setLevelPrice(res)
+    // })
 
-    getPhase().then((res) => {
-      console.log(res)
-      setPhases(res)
-    })
+    // getPhase().then((res) => {
+    //   console.log(res)
+    //   setPhases(res)
+    // })
 
     // getReaction(auth.contextAccounts[0]).then(async (reactionData) => {
     // console.log(reactionData)
@@ -736,107 +736,6 @@ export default function Page() {
 
   // {reaction && reaction.sort((a, b) => web3.utils.toNumber(b.dt) - web3.utils.toNumber(a.dt)).map((item, i) => {
   return (
-    <div className={`${styles.page} ms-motion-slideDownIn`}>
-      <div className={`__container`} data-width={`xlarge`}>
-        <div className={`grid grid--fit grid--gap-1 w-100`} style={{ '--data-width': `150px` }}>
-          {auth.walletConnected && (
-            <>
-              <div className="card">
-                <div className={`card__body d-f-c flex-column`}>
-                  <WalletBalance />
-                  <small>Wallet LYX Balance</small>
-                </div>
-              </div>
-
-              <div className="card">
-                <div className={`card__body d-f-c flex-column`}>
-                  <WalletFishBalance />
-                  <small>Wallet Fish Balance</small>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="card" data-shadow={'none'}>
-          <button disabled={isInitialized} onClick={(e) => initialize(e)} className="btn" style={{ width: `100%` }}>
-            {isInitialized ? 'Already initialized' : 'Initialize'}
-          </button>
-        </div>
-
-        <div className={`grid grid--fill grid--gap-1 w-100`} style={{ '--data-width': `150px` }}>
-          <div className="card" data-readonly={true}>
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{maxSupply && new Intl.NumberFormat().format(maxSupply)}</b>
-              <small>Max Supply</small>
-            </div>
-          </div>
-
-          <div className="card" data-readonly={true}>
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{supplyCap && new Intl.NumberFormat().format(supplyCap)}</b>
-              <small>Supply Cap (Ph1 + Ph2)</small>
-            </div>
-          </div>
-
-          <div className="card" data-readonly={true}>
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{version && web3.utils.hexToAscii(version)}</b>
-              <small>Version</small>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{tokenIdCounter && new Intl.NumberFormat().format(tokenIdCounter)}</b>
-              <small>Minted</small>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{PPT && PPT}</b>
-              <small>Point Per Tap</small>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{(activePhase && activePhase !== `0x0000000000000000000000000000000000000000000000000000000000000000` && activePhase) || `-`}</b>
-              <small>Active Phase</small>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{LYXBalance && `${LYXBalance} LYX`}</b>
-              <small>LYX Balance</small>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className={`card__body d-f-c flex-column`}>
-              <b>{fishBalance && new Intl.NumberFormat().format(fishBalance)} FISH</b>
-              <small>FISH Balance</small>
-            </div>
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card__header">Level Prices</div>
-          <div className={`card__body`}>
-            <ul>
-              {levelPrice &&
-                levelPrice.map((item, i) => (
-                  <li key={i} className={`d-flex align-items-center gap-1`}>
-                    <small style={{ width: `40px` }}>LVL {++i}:</small>
-                    <code>{new Intl.NumberFormat().format(web3.utils.fromWei(item, `ether`))} FISH</code>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </div>
-
         <div className="card">
           <div className="card__header">Update Owner Fee</div>
           <div className={`card__body`}>
@@ -853,272 +752,6 @@ export default function Page() {
             </form>
           </div>
         </div>
-
-        <div className="card">
-          <div className="card__header">Contract Addresses</div>
-          <div className={`card__body`}>
-            <ul>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Fish:</small>
-                <a target="_blank" href={`https://explorer.execution.testnet.lukso.network/address/${FISH}`}>
-                  <code>{FISH}</code>
-                </a>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Member card:</small>
-                <a target="_blank" href={`https://explorer.execution.testnet.lukso.network/address/${MEMBER_CARD}`}>
-                  <code>{MEMBER_CARD}</code>
-                </a>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Rich:</small>
-
-                <a target="_blank" href={`https://explorer.execution.testnet.lukso.network/address/${RICH}`}>
-                  <code>{RICH}</code>
-                </a>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Fishcan:</small>
-                <a target="_blank" href={`https://explorer.execution.testnet.lukso.network/address/${FISHCAN}`}>
-                  <code>{FISHCAN}</code>
-                </a>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Arattalabs:</small>
-                <code>{ARATTALABS}</code>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Lukseals:</small>
-                <code>{LUKSEALS}</code>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Madski:</small>
-                <code>{MADSKI}</code>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Dachriz:</small>
-                <code>{DACHRIZ}</code>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>ARF-I:</small>
-                <code>{ARFI}</code>
-              </li>
-              <li className={`d-flex align-items-center gap-1`}>
-                <small style={{ width: `100px` }}>Following:</small>
-                <a target="_blank" href={`https://explorer.execution.testnet.lukso.network/address/${FOLLOWING}`}>
-                  <code>{FOLLOWING}</code>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card__header">Update Contract Addresses</div>
-          <div className={`card__body`}>
-            {/* {errors?.email && <span>{errors.email}</span>} */}
-            <form onSubmit={(e) => updateAddresses(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
-              <div>
-                <label htmlFor="">Addresses[]</label>
-                <input type="text" name="_newAddresses" defaultValue={``} placeholder="0x0, 0x1, ..., 0x10" required />
-              </div>
-
-              <button className="mt-20 btn" type="submit">
-                Update
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card__header">Phases</div>
-          <div className={`card__body d-flex align-items-center`}>
-            <ul>
-              {phases &&
-                phases.map((item, i) => (
-                  <li key={i} className={`d-flex flex-row align-items-center gap-1 mt-10 ${activePhase === `phase${i + 1}` && 'animate__animated animate__flash animate__slower animate__infinite'}`}>
-                    <span className="text-danger">phase {i + 1}</span>
-                    <small>
-                      Background: <b>{item.background}</b>
-                    </small>
-                    <small title="Max Mint Per Wallet">
-                      MMPW: <b>{web3.utils.toNumber(item.maxMintPerWallet)} seals</b>
-                    </small>
-                    <small>
-                      Price:
-                      <b className="ml-10 badge badge-danger">
-                        {new Intl.NumberFormat().format(web3.utils.fromWei(web3.utils.toNumber(item.price), `ether`))}
-                        {item.tokenAddress == `0x0000000000000000000000000000000000000000` ? ` LYX` : ` FISH`}
-                      </b>
-                    </small>
-                    <small title={item.tokenAddress}>Token Address</small>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className={`grid grid--fit grid--gap-1 w-100`} style={{ '--data-width': `400px` }}>
-          <div className="card">
-            <div className="card__header">Update Phases</div>
-            <div className={`card__body`}>
-              <form onSubmit={(e) => updatePhase(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
-                <select name="" id="" onChange={(e) => setSelectedPhase(e.target.value)}>
-                  <option value="">Select phase</option>
-                  {phases &&
-                    phases.map((item, i) => (
-                      <option key={i} value={i + 1}>
-                        phase{i + 1}
-                      </option>
-                    ))}
-                </select>
-
-                {selectedPhase && (
-                  <div className="border border--dark" style={{ background: `var(--black-050)`, padding: `10px` }}>
-                    <div>
-                      <label htmlFor="">Name</label>
-                      <input type="text" name="_phaseName" defaultValue={web3.utils.keccak256(`phase${selectedPhase}`)} required />
-                      <input type="hidden" name="_phaseNameHidden" defaultValue={``} />
-                    </div>
-                    <div>
-                      <label htmlFor="">Background</label>
-                      <input type="text" name="_background" defaultValue={phases[selectedPhase - 1].background} required />
-                    </div>
-                    <div>
-                      <label htmlFor="">Max Mint Per Wallet</label>
-                      <input type="text" name="_maxMintPerWallet" defaultValue={web3.utils.toNumber(phases[selectedPhase - 1].maxMintPerWallet)} required />
-                    </div>
-                    <div>
-                      <label htmlFor="">Price</label>
-                      <input type="text" name="_price" defaultValue={web3.utils.fromWei(web3.utils.toNumber(phases[selectedPhase - 1].price), `ether`)} required />
-                    </div>
-                    <div>
-                      <label htmlFor="">Token Address</label>
-                      <input type="text" name="_tokenAddress" defaultValue={phases[selectedPhase - 1].tokenAddress} required />
-                    </div>
-                  </div>
-                )}
-                <button className="mt-20 btn" type="submit">
-                  Update
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card__header">Update Point & Level</div>
-            <div className={`card__body`}>
-              <form onSubmit={(e) => updatePoint(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
-                <div>
-                  <label htmlFor="">Token Id</label>
-                  <input type="text" name="_tokenId" id={`_tokenId`} required />
-                  <small>
-                    e.g. <code>0x0000000000000000000000000000000000000000000000000000000000000001</code>
-                  </small>
-                </div>
-
-                <output>
-                  {level && (
-                    <>
-                      <code>
-                        Level: {web3.utils.toNumber(level.level)}
-                        <br />
-                        XP: {web3.utils.toNumber(level.xp)}
-                      </code>
-                    </>
-                  )}
-                </output>
-
-                <div>
-                  <label htmlFor="">Point</label>
-                  <input type="number" name="_point" required defaultValue={level && level.xp} disabled={!level} />
-                </div>
-
-                <div>
-                  <label htmlFor="">Level</label>
-                  <input type="number" name="_level" min={0} max={10} defaultValue={level && level.level} required disabled={!level} />
-                  <small>Level can be 0-10</small>
-                </div>
-
-                <button className="mt-20 btn" type="button" onClick={(e) => getLevel(e, document.querySelector(`#_tokenId`).value)}>
-                  Get level
-                </button>
-                <button className="mt-20 btn" type="submit" disabled={!level}>
-                  Update
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card__header">Update PPT</div>
-            <div className={`card__body`}>
-              {/* {errors?.email && <span>{errors.email}</span>} */}
-              <form onSubmit={(e) => updatePPT(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
-                <div>
-                  <input type="number" name="_newValue" placeholder="0" required />
-                </div>
-
-                <button className="mt-20 btn" type="submit">
-                  Update
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card__header">Check Whitelist</div>
-            <div className={`card__body`}>
-              {/* {errors?.email && <span>{errors.email}</span>} */}
-              <form onSubmit={(e) => checkWhitelist(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
-                <div>
-                  <input type="text" name="address" placeholder="0x0" required />
-                </div>
-
-                <button className="mt-20 btn" type="submit">
-                  Check
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card__header">Update Whitelist</div>
-            <div className={`card__body`}>
-              {/* {errors?.email && <span>{errors.email}</span>} */}
-              <form onSubmit={(e) => updateWhitelist(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
-                <div>
-                  <label htmlFor="">Addresses[]</label>
-                  <input type="text" name="address" placeholder={`0x0, 0x1, 0xn`} required />
-                </div>
-
-                <div>
-                  <input type="number" name="count" defaultValue={1} required />
-                  <small>If greater than 0, the wallet address will be whitelisted.</small>
-                </div>
-
-                <button className="mt-20 btn" type="submit">
-                  Update
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div className={`card mt-10`}>
-            <div className={`card__header`}>Transfer ownership</div>
-            <div className={`card__body form`}>
-              <div>
-                <input className="input" type="text" id="newOwner" />
-              </div>
-
-              <button className="mt-10 btn" onClick={(e) => handleTransfer(e)}>
-                Transfer
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   )
 }
 
