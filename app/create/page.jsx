@@ -125,7 +125,7 @@ export default function Page() {
     <div className={`${styles.page} ms-motion-slideDownIn`}>
       <div className={`__container ${styles.page__container}`} data-width={`medium`}>
         <div className={`grid grid--fit grid--gap-1`} style={{ '--data-width': `80px` }}>
-          <div className={`card border`}>
+          <div className={`card  border border--light`}>
             <div className={`card__body`}>
               <span>Price</span>
               <h2>{!price ? `Reading...` : price} LYX</h2>
@@ -133,31 +133,17 @@ export default function Page() {
             </div>
           </div>
 
-          <div className={`card`}>
+          <div className={`card border border--light`}>
             <div className={`card__body`}>
-              <span>Owner Fee</span>
-              <h2>5%</h2>
-            </div>
-          </div>
-
-          <div className={`card`}>
-            <div className={`card__body`}>
-              <span>Claim Fee</span>
+              <span>Host Fee</span>
               <h2>2%</h2>
             </div>
           </div>
 
-          <div className={`card`}>
+          <div className={`card border border--light`}>
             <div className={`card__body`}>
-              <span>Max AD</span>
-              <h2>8</h2>
-            </div>
-          </div>
-
-          <div className={`card`}>
-            <div className={`card__body`}>
-              <span>AD space</span>
-              <h2>{adSpace === 0 ? 'No space' : adSpace - 1} ADs</h2>
+              <span>Available ads</span>
+              <h2>{adSpace === 0 ? 'No space' : adSpace - 1} of 8</h2>
             </div>
           </div>
         </div>
