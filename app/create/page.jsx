@@ -129,7 +129,7 @@ export default function Page() {
             <div className={`card__body`}>
               <span>Price</span>
               <h2>{!price ? `Reading...` : price} LYX</h2>
-              <small>Price per day</small>
+              <small style={{color:`#999`}}>Price per day</small>
             </div>
           </div>
 
@@ -137,6 +137,7 @@ export default function Page() {
             <div className={`card__body`}>
               <span>Host Fee</span>
               <h2>2%</h2>
+              <small style={{color:`#999`}}>Fee that the UP that hosts the ad receives</small>
             </div>
           </div>
 
