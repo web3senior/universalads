@@ -323,7 +323,7 @@ export default function Page() {
     const t = toast.loading(`Waiting for transaction's confirmation`)
 
     const formData = new FormData(e.target)
-    const fee = web3.utils.keccak256(formData.get('_fee'))
+    const fee = formData.get('_fee')
 
     try {
       contract.methods
