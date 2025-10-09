@@ -318,18 +318,18 @@ export default function Page() {
   }
 
   // ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
-  const updateActivePhase = async (e) => {
+  const updateOwnerFee = async (e) => {
     e.preventDefault()
     const t = toast.loading(`Waiting for transaction's confirmation`)
 
     const formData = new FormData(e.target)
-    const phaseName = web3.utils.keccak256(formData.get('_phaseName'))
+    const fee = web3.utils.keccak256(formData.get('_fee'))
 
     console.log(phaseName)
 
     try {
       contract.methods
-        .updateActivePhase(phaseName)
+        .updateFee(fee)
         .send({
           from: auth.accounts[0],
         })
@@ -838,13 +838,13 @@ export default function Page() {
         </div>
 
         <div className="card">
-          <div className="card__header">Update Active Phase</div>
+          <div className="card__header">Update Owner Fee</div>
           <div className={`card__body`}>
-            <form onSubmit={(e) => updateActivePhase(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
+            <form onSubmit={(e) => updateOwnerFee(e)} className={`form d-flex flex-column`} style={{ rowGap: '1rem' }}>
               <div>
-                <label htmlFor="">Active Phase</label>
-                <input type="text" name="_phaseName" defaultValue={``} placeholder="" required />
-                <small>phase1, phase2, phase3, phase4</small>
+                <label htmlFor="">Fee</label>
+                <input type="text" name="_fee" defaultValue={``} placeholder="" required />
+                <small></small>
               </div>
 
               <button className="mt-20 btn" type="submit">
