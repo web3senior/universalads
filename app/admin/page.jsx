@@ -325,8 +325,6 @@ export default function Page() {
     const formData = new FormData(e.target)
     const fee = web3.utils.keccak256(formData.get('_fee'))
 
-    console.log(phaseName)
-
     try {
       contract.methods
         .updateFee(fee)
